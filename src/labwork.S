@@ -34,29 +34,6 @@ hexasc:
 		jr 	$ra
 		nop
 
-delay:
-	li	$t0,0	#reset t0
-	li	$a1,4200000	#for loop constant
-	while:
-		slt	$t4,$0,$a0
-		beq	$t4,$0,whileDone	#while ms>0 
-		nop
-		addi	$a0,$a0,-1		#ms = ms - 1
-		for:
-			beq	$t0,$a1,forDone	#for (...)
-			nop
-			addi	$t0,$t0,1	#i++
-			j	for
-			nop
-
-		forDone:
-			j	while
-			nop
-
-	whileDone:
-		jr 	$ra
-		nop
-
 time2string:
 	PUSH    $s0            # save registers and return address    
     	PUSH    $s1
@@ -93,19 +70,6 @@ time2string:
     
     	addi    $t3,$t3,0x00        #add null byte
     	sb    $t3,5($s0)
-    
-    	addi    $t8,$0,0x00000000
-    	andi    $t9,$s1, 0x0000ffff    
-    	beq    $t9,$t8,setHour
-    	nop
-    	j done
-    	nop
-    	setHour:
-        	li     $t2,0x52554f48
-        	sw    $t2,0($s0)
-        	sb    $0,4($s0)
-    
-    	done:
     
     	move    $a0,$s0            #move address back to a0
     

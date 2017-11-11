@@ -11,7 +11,12 @@
 #include <pic32mx.h>  /* Declarations of system-specific addresses etc */
 #include "mipslab.h"  /* Declatations for these labs */
 
+int RUNNING = 1;
+int PAUSED = 2;
+int GAMEOVER = 3;
+
 int main(void) {
+    int GAMESTATE = RUNNING;
         /*
 	  This will set the peripheral bus clock to the same frequency
 	  as the sysclock. That means 80 MHz, when the microcontroller
@@ -61,13 +66,17 @@ int main(void) {
 	display_string(3, "Welcome!");
 	display_update();
 	
-	display_image(96, icon);
-	
-	labinit(); /* Do any lab-specific initialization */
-
-	while( 1 )
-	{
-	  labwork(); /* Do lab-specific things again and again */
+	init(); /* Do any lab-specific initialization */
+	while( 1 ) {
+        switch(GAMESTATE) {
+            case RUNNING:
+                update();
+                break;
+            case PAUSED:
+                break;
+            case GAMEOVER:
+                break;
+        }
 	}
 	return 0;
 }

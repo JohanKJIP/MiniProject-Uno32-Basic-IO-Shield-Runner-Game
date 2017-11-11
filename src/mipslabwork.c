@@ -14,9 +14,7 @@
 #include <pic32mx.h>  /* Declarations of system-specific addresses etc */
 #include "mipslab.h"  /* Declatations for these labs */
 
-int mytime = 0x5957;
-
-char textstring[] = "text, more text, and even more text!";
+int mytime = 0x0;
 volatile int* ledp;
 
 /* Interrupt Service Routine */
@@ -25,7 +23,7 @@ void user_isr( void ) {
 }
 
 /* Lab-specific initialization goes here */
-void labinit( void ) {
+void init( void ) {
     /* enable led */
     volatile int* trise = (volatile int*) 0xbf886100;
     *trise &= ~0xff;
@@ -36,8 +34,18 @@ void labinit( void ) {
 
     /*  enable buttons to input */
     TRISD |= 0xFE0;
+
+    /* timer */
+    T2CON |= 0x8000; //timer 2 control register
+    T2CON |= 0x70;
+    PR2 = 31250; //period register
 }
 
+/**
+ * Set current time.
+ * @param switches
+ * @param buttons
+ */
 void setTime(int switches, int buttons){
     buttons <<= 1;
     int hexButtons = hexConverter(buttons); //convert to hex
@@ -56,6 +64,11 @@ void setTime(int switches, int buttons){
     mytime = (mytime & inverted) | (hexButtons & hexSwitches);
 }
 
+/**
+ * Convert binary to hex number.
+ * @param binary
+ * @return
+ */
 int hexConverter(int binary){
     int hex = 0x0;
     int i;
@@ -81,8 +94,17 @@ void checkbuttons(){
 }
 
 /* This function is called repetitively from the main program */
-void labwork( void ) {
-    delay( 1000 );
+void update( void ) {
+    /* delay */
+    while (timeoutcount<10) {
+        int t2interruptflag = (IFS(0) & 0x100)>>8;
+        if(t2interruptflag) {
+            timeoutcount++;
+            IFS(0) &= 0xFFFFFEFF;
+        }
+    }
+
+    timeoutcount = 0;
     checkbuttons();
     time2string( textstring, mytime );
     display_string( 3, textstring );
