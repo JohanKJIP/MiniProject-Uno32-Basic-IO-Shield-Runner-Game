@@ -84,7 +84,7 @@ volatile int* ledp;
 void init( void ) {
     /* enable led */
     volatile int* trise = (volatile int*) 0xbf886100;
-    trise &= ~0xff;
+    *trise &= ~0xff;
 
     /* set led to output PORTE */
     ledp = (volatile int*) 0xbf886110;

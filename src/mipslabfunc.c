@@ -32,41 +32,6 @@ void quicksleep(int cyc) {
 	for(i = cyc; i > 0; i--);
 }
 
-/* tick:
-   Add 1 to time in memory, at location pointed to by parameter.
-   Time is stored as 4 pairs of 2 NBCD-digits.
-   1st pair (most significant byte) counts days.
-   2nd pair counts hours.
-   3rd pair counts minutes.
-   4th pair (least significant byte) counts seconds.
-   In most labs, only the 3rd and 4th pairs are used. */
-void tick( unsigned int * timep )
-{
-  /* Get current value, store locally */
-  register unsigned int t = * timep;
-  t += 1; /* Increment local copy */
-  
-  /* If result was not a valid BCD-coded time, adjust now */
-
-  if( (t & 0x0000000f) >= 0x0000000a ) t += 0x00000006;
-  if( (t & 0x000000f0) >= 0x00000060 ) t += 0x000000a0;
-  /* Seconds are now OK */
-
-  if( (t & 0x00000f00) >= 0x00000a00 ) t += 0x00000600;
-  if( (t & 0x0000f000) >= 0x00006000 ) t += 0x0000a000;
-  /* Minutes are now OK */
-
-  if( (t & 0x000f0000) >= 0x000a0000 ) t += 0x00060000;
-  if( (t & 0x00ff0000) >= 0x00240000 ) t += 0x00dc0000;
-  /* Hours are now OK */
-
-  if( (t & 0x0f000000) >= 0x0a000000 ) t += 0x06000000;
-  if( (t & 0xf0000000) >= 0xa0000000 ) t = 0;
-  /* Days are now OK */
-
-  * timep = t; /* Store new value */
-}
-
 /* display_debug
    A function to help debugging.
 
@@ -97,7 +62,7 @@ uint8_t spi_send_recv(uint8_t data) {
 }
 
 void display_init(void) {
-        DISPLAY_CHANGE_TO_COMMAND_MODE;
+    DISPLAY_CHANGE_TO_COMMAND_MODE;
 	quicksleep(10);
 	DISPLAY_ACTIVATE_VDD;
 	quicksleep(1000000);
@@ -194,99 +159,9 @@ static void num32asc( char * s, int n )
 }
 
 /*
- * nextprime
- * 
- * Return the first prime number larger than the integer
- * given as a parameter. The integer must be positive.
- */
-#define PRIME_FALSE   0     /* Constant to help readability. */
-#define PRIME_TRUE    1     /* Constant to help readability. */
-int nextprime( int inval )
-{
-   register int perhapsprime = 0; /* Holds a tentative prime while we check it. */
-   register int testfactor; /* Holds various factors for which we test perhapsprime. */
-   register int found;      /* Flag, false until we find a prime. */
-
-   if (inval < 3 )          /* Initial sanity check of parameter. */
-   {
-     if(inval <= 0) return(1);  /* Return 1 for zero or negative input. */
-     if(inval == 1) return(2);  /* Easy special case. */
-     if(inval == 2) return(3);  /* Easy special case. */
-   }
-   else
-   {
-     /* Testing an even number for primeness is pointless, since
-      * all even numbers are divisible by 2. Therefore, we make sure
-      * that perhapsprime is larger than the parameter, and odd. */
-     perhapsprime = ( inval + 1 ) | 1 ;
-   }
-   /* While prime not found, loop. */
-   for( found = PRIME_FALSE; found != PRIME_TRUE; perhapsprime += 2 )
-   {
-     /* Check factors from 3 up to perhapsprime/2. */
-     for( testfactor = 3; testfactor <= (perhapsprime >> 1) + 1; testfactor += 1 )
-     {
-       found = PRIME_TRUE;      /* Assume we will find a prime. */
-       if( (perhapsprime % testfactor) == 0 ) /* If testfactor divides perhapsprime... */
-       {
-         found = PRIME_FALSE;   /* ...then, perhapsprime was non-prime. */
-         goto check_next_prime; /* Break the inner loop, go test a new perhapsprime. */
-       }
-     }
-     check_next_prime:;         /* This label is used to break the inner loop. */
-     if( found == PRIME_TRUE )  /* If the loop ended normally, we found a prime. */
-     {
-       return( perhapsprime );  /* Return the prime we found. */
-     } 
-   }
-   return( perhapsprime );      /* When the loop ends, perhapsprime is a real prime. */
-} 
-
-/*
- * itoa
- * 
  * Simple conversion routine
  * Converts binary to decimal numbers
  * Returns pointer to (static) char array
- * 
- * The integer argument is converted to a string
- * of digits representing the integer in decimal format.
- * The integer is considered signed, and a minus-sign
- * precedes the string of digits if the number is
- * negative.
- * 
- * This routine will return a varying number of digits, from
- * one digit (for integers in the range 0 through 9) and up to
- * 10 digits and a leading minus-sign (for the largest negative
- * 32-bit integers).
- * 
- * If the integer has the special value
- * 100000...0 (that's 31 zeros), the number cannot be
- * negated. We check for this, and treat this as a special case.
- * If the integer has any other value, the sign is saved separately.
- * 
- * If the integer is negative, it is then converted to
- * its positive counterpart. We then use the positive
- * absolute value for conversion.
- * 
- * Conversion produces the least-significant digits first,
- * which is the reverse of the order in which we wish to
- * print the digits. We therefore store all digits in a buffer,
- * in ASCII form.
- * 
- * To avoid a separate step for reversing the contents of the buffer,
- * the buffer is initialized with an end-of-string marker at the
- * very end of the buffer. The digits produced by conversion are then
- * stored right-to-left in the buffer: starting with the position
- * immediately before the end-of-string marker and proceeding towards
- * the beginning of the buffer.
- * 
- * For this to work, the buffer size must of course be big enough
- * to hold the decimal representation of the largest possible integer,
- * and the minus sign, and the trailing end-of-string marker.
- * The value 24 for ITOA_BUFSIZ was selected to allow conversion of
- * 64-bit quantities; however, the size of an int on your current compiler
- * may not allow this straight away.
  */
 #define ITOA_BUFSIZ ( 24 )
 char * itoaconv( int num )

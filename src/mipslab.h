@@ -19,7 +19,6 @@ char * itoaconv( int num );
 void labwork(void);
 int nextprime( int inval );
 void quicksleep(int cyc);
-void tick( unsigned int * timep );
 
 /* Declare display_debug - a function to help debugging.
 
