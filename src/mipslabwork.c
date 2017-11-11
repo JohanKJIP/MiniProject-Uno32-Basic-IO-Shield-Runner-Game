@@ -17,6 +17,7 @@
 int mytime = 0x0;
 volatile int* ledp;
 int timeoutcount = 0;
+char textstring[] = "";
 
 /* Interrupt Service Routine */
 void user_isr( void ) {
