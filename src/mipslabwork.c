@@ -16,10 +16,32 @@
 
 int mytime = 0x0;
 volatile int* ledp;
+int timeoutcount = 0;
 
 /* Interrupt Service Routine */
 void user_isr( void ) {
-    return;
+    if (timeoutcount>9 && (IFS(0) & 0x100)>>8) {
+        time2string( textstring, mytime );
+        display_string( 3, textstring );
+        display_update();
+        tick( &mytime );
+        timeoutcount = 0;
+    }
+    IFS(0) &= 0xFFFFFEFF;
+    timeoutcount++;
+
+    if ((IFS(0) & 0x800)>> 11) {
+        mytime += 3;
+        IFS(0) &= 0x7FF;
+    }
+
+    /* time */
+    IEC(0) |= 0x100;    //enable interrupt flag
+    IPC(2) |= 0x1f;     //set priority
+    /*switch */
+    IEC(0) |= 0x800;    //bit 11 enable interrupt
+    IPC(2) |= 0x1E000000; //bit 24-28
+    enable_interrupt(); //enable gloabl interrupt
 }
 
 /* Lab-specific initialization goes here */
@@ -95,21 +117,10 @@ void checkbuttons(){
 
 /* This function is called repetitively from the main program */
 void update( void ) {
-    /* delay */
-    while (timeoutcount<10) {
-        int t2interruptflag = (IFS(0) & 0x100)>>8;
-        if(t2interruptflag) {
-            timeoutcount++;
-            IFS(0) &= 0xFFFFFEFF;
-        }
-    }
-
-    timeoutcount = 0;
     checkbuttons();
     time2string( textstring, mytime );
     display_string( 3, textstring );
     display_update();
     tick( &mytime );
     *ledp = *ledp + 1;
-    display_image(96, icon);
 }
