@@ -53,3 +53,17 @@ extern int GAMESTATE;
 
 /* Functions from gameRunning.c */
 int getRandomInt(int);
+
+/* structs */
+struct player {
+    int xPos;
+    int yPos;
+    int PLAYER_SCORE;
+    int JUMPING;
+    int LEFT_LEG_DOWN;
+};
+
+struct obstacle {
+    int xPos;
+    int yPos;
+};
