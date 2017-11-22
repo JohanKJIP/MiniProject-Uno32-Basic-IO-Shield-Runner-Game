@@ -9,7 +9,9 @@
 
 #include <stdint.h>   /* Declarations of uint_32 and the like */
 #include <pic32mx.h>  /* Declarations of system-specific addresses etc */
-#include "mipslab.h"  /* Declatations for these labs */
+#include "gameHeader.h"
+#include <time.h>   /*TODO */
+#include <stdlib.h> /*TODO */
 
 volatile int* ledp;
 /* Init basic functions */
@@ -44,6 +46,7 @@ int PAUSED = 2;
 int GAMEOVER = 3;
 
 int main(void) {
+    srand(time(NULL));
     int GAMESTATE = RUNNING;
         /*
 	  This will set the peripheral bus clock to the same frequency
@@ -56,13 +59,13 @@ int main(void) {
 	OSCCONCLR = 0x180000; /* clear PBDIV bit <0,1> */
 	while(OSCCON & (1 << 21));  /* Wait until PBDIV ready */
 	SYSKEY = 0x0;  /* Lock OSCCON */
-	
+
 	/* Set up output pins */
 	AD1PCFG = 0xFFFF;
 	ODCE = 0x0;
 	TRISECLR = 0xFF;
 	PORTE = 0x0;
-	
+
 	/* Output pins for display signals */
 	PORTF = 0xFFFF;
 	PORTG = (1 << 9);
@@ -70,11 +73,11 @@ int main(void) {
 	ODCG = 0x0;
 	TRISFCLR = 0x70;
 	TRISGCLR = 0x200;
-	
+
 	/* Set up input pins */
 	TRISDSET = (1 << 8);
 	TRISFSET = (1 << 1);
-	
+
 	/* Set up SPI as master */
 	SPI2CON = 0;
 	SPI2BRG = 4;
@@ -86,10 +89,10 @@ int main(void) {
 	SPI2CONSET = 0x20;
 	/* SPI2CON bit ON = 1; */
 	SPI2CONSET = 0x8000;
-	
+
 	display_init();
 	display_update();
-	
+
 	init(); /* Do any lab-specific initialization */
 	while( 1 ) {
         if(GAMESTATE == RUNNING) {

@@ -1,6 +1,6 @@
 #include <stdint.h>
 #include <pic32mx.h>
-#include "mipslab.h"
+#include "gameHeader.h"
 
 int getsw(void) {
     int TEMPPORT = PORTD;

@@ -4,7 +4,7 @@
 
 #include <stdint.h>
 #include <pic32mx.h>
-#include "mipslab.h"
+#include "gameHeader.h"
 
 #define DISPLAY_CHANGE_TO_COMMAND_MODE (PORTFCLR = 0x10)
 #define DISPLAY_CHANGE_TO_DATA_MODE (PORTFSET = 0x10)
@@ -58,7 +58,7 @@ void display_init(void) {
 
     sendSPI(0xD9);
     sendSPI(0xF1);
-	
+
 	DISPLAY_ACTIVATE_VBAT;
     sleep(10000000);
 
@@ -81,7 +81,7 @@ void display_string(int line, char *s) {
 		return;
 	if(!s)
 		return;
-	
+
 	for(i = 0; i < 16; i++)
 		if(*s) {
 			textbuffer[line][i] = *s;
@@ -92,7 +92,7 @@ void display_string(int line, char *s) {
 
 void display_image(int x, const uint8_t *data) {
 	int i, j;
-	
+
 	for(i = 0; i < 4; i++) {
 		DISPLAY_CHANGE_TO_COMMAND_MODE;
 
@@ -101,9 +101,9 @@ void display_image(int x, const uint8_t *data) {
 
         sendSPI(x & 0xF);
         sendSPI(0x10 | ((x >> 4) & 0xF));
-		
+
 		DISPLAY_CHANGE_TO_DATA_MODE;
-		
+
 		for(j = 0; j < 32; j++)
             sendSPI(~data[i*32 + j]);
 	}
@@ -119,14 +119,14 @@ void display_update(void) {
 
         sendSPI(0x0);
         sendSPI(0x10);
-		
+
 		DISPLAY_CHANGE_TO_DATA_MODE;
-		
+
 		for(j = 0; j < 16; j++) {
 			c = textbuffer[i][j];
 			if(c & 0x80)
 				continue;
-			
+
 			for(k = 0; k < 8; k++)
                 sendSPI(font[c*8 + k]);
 		}
