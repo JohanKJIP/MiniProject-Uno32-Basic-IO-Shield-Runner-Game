@@ -11,6 +11,34 @@
 #include <pic32mx.h>  /* Declarations of system-specific addresses etc */
 #include "mipslab.h"  /* Declatations for these labs */
 
+volatile int* ledp;
+/* Init basic functions */
+void init( void ) {
+    /* enable led */
+    volatile int* trise = (volatile int*) 0xbf886100;
+    *trise &= ~0xff;
+
+    /* set led to output PORTE */
+    ledp = (volatile int*) 0xbf886110;
+    *ledp = 0;
+
+    /*  enable buttons to input */
+    TRISD |= 0xFE0;
+
+    /* timer */
+    T2CON |= 0x8000; //timer 2 control register
+    T2CON |= 0x70;
+    PR2 = 31250; //period register
+
+    /* timer interrupt enable */
+    IEC(0) |= 0x100;    //enable interrupt flag
+    IPC(2) |= 0x1f;     //set priority
+    /*switch interrupt enable */
+    IEC(0) |= 0x800;    //bit 11 enable interrupt
+    IPC(2) |= 0x1E000000; //bit 24-28
+    enable_interrupt(); //enable global interrupt
+}
+
 int RUNNING = 1;
 int PAUSED = 2;
 int GAMEOVER = 3;
@@ -60,10 +88,6 @@ int main(void) {
 	SPI2CONSET = 0x8000;
 	
 	display_init();
-	display_string(0, "Runner game");
-	display_string(1, "by johvh");
-	display_string(2, "and davidjo2");
-	display_string(3, "Enjoy!");
 	display_update();
 	
 	init(); /* Do any lab-specific initialization */
@@ -77,32 +101,4 @@ int main(void) {
         }
 	}
 	return 0;
-}
-
-volatile int* ledp;
-/* Init basic functions */
-void init( void ) {
-    /* enable led */
-    volatile int* trise = (volatile int*) 0xbf886100;
-    *trise &= ~0xff;
-
-    /* set led to output PORTE */
-    ledp = (volatile int*) 0xbf886110;
-    *ledp = 0;
-
-    /*  enable buttons to input */
-    TRISD |= 0xFE0;
-
-    /* timer */
-    T2CON |= 0x8000; //timer 2 control register
-    T2CON |= 0x70;
-    PR2 = 31250; //period register
-
-    /* timer interrupt enable */
-    IEC(0) |= 0x100;    //enable interrupt flag
-    IPC(2) |= 0x1f;     //set priority
-    /*switch interrupt enable */
-    IEC(0) |= 0x800;    //bit 11 enable interrupt
-    IPC(2) |= 0x1E000000; //bit 24-28
-    enable_interrupt(); //enable global interrupt
 }

@@ -43,5 +43,9 @@ int hexConverter(int binary){
  * Update game, this is the game loop.
  */
 void updateRunning( void ) {
+    int i;
+    for(i = 0; i<40; ++i) {
+        displayPixel(i,1);
+    }
     display_update();
 }
