@@ -1,4 +1,4 @@
-/* mipslabwork.c
+/* gameRunning.c
    Written by johvh & davidjo2.
 */
 

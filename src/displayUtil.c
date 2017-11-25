@@ -46,11 +46,14 @@ void sendSPI(uint8_t data) {
  * @param int y position.
  */
 void printPixel(int x, int y) {
-	int yOffset = y % 8;         //array pos value (0-8, where 0 is upper pixel, 8 is lowest pixel)
-	int page = y / 8;        //page position index
-	int arrayPos = page*128 + x; //position in the array (0-512)
-	/* OR  wanted pixel with the current value in the column. (1 = 0x1, 2 = 0x10, 3 = 0x100 ...) */
-	dataArray[arrayPos] = dataArray[arrayPos] | (0x1<<yOffset);
+	if(x<128 && y<32) {
+		int yOffset = y % 8;            // array pos value (0-8, where 0 is upper pixel, 8 is lowest pixel)
+		int page = y / 8;               // page position index
+		int arrayPos = page*128 + x;    // position in the array (0-512)
+
+		/* OR pixel with current value in the column. (1 = 0x1, 2 = 0x10, 3 = 0x100 ...) */
+		dataArray[arrayPos] = dataArray[arrayPos] | (0x1<<yOffset);
+	}
 }
 
 /**
@@ -80,17 +83,20 @@ void display_init(void) {
     sendSPI(0xA1);
     sendSPI(0xC8);
 
-    sendSPI(0xDA); //some com pins thing?
+    sendSPI(0xDA); // some com pins thing?
     sendSPI(0x20);
 
-	sendSPI(0x20); //set addressing mode.
-	sendSPI(0x0);  //horizontal addressing mode.
+	sendSPI(0x20); // set addressing mode
+	sendSPI(0x0);  // horizontal addressing mode
 
-    sendSPI(0xAF); //turn on display.
+    sendSPI(0xAF); // turn on display
 	sleep(100);
 	DISPLAY_CHANGE_TO_DATA_MODE;
 }
 
+/**
+ * Memset function from string.h (import didn't work).
+ */
 void memset(void *arr, int val, int size) {
 	if (size) {
 		char *d = arr;
@@ -100,6 +106,9 @@ void memset(void *arr, int val, int size) {
    }
 }
 
+/**
+ * Update the display.
+ */
 int xpos = 0;
 int ypos = 32;
 void display_update(void) {
@@ -112,11 +121,11 @@ void display_update(void) {
 	if(ypos<1) {
 		ypos = 32;
 	}
-	// render buffer.
+	// send render buffer to screen
 	int i;
 	for(i=0; i<DATA_ARRAY_SIZE; i++) {
 		sendSPI(dataArray[i]);
 	}
-	// clear render buffer after each render cycle.
+	// clear render buffer after each render cycle
 	memset(dataArray, 0, sizeof(dataArray));
 }
