@@ -40,6 +40,11 @@ void sendSPI(uint8_t data) {
 	while(!(SPI2STAT & 1));
 }
 
+/**
+ * Add a pixel to the render buffer.
+ * @param int x position.
+ * @param int y position.
+ */
 void printPixel(int x, int y) {
 	int yOffset = y % 8;         //array pos value (0-8, where 0 is upper pixel, 8 is lowest pixel)
 	int page = y / 8;        //page position index
@@ -49,7 +54,7 @@ void printPixel(int x, int y) {
 }
 
 /**
- * Initialise display
+ * Initialise display.
  */
 void display_init(void) {
     DISPLAY_CHANGE_TO_COMMAND_MODE;
@@ -98,9 +103,6 @@ void memset(void *arr, int val, int size) {
 int xpos = 0;
 int ypos = 32;
 void display_update(void) {
-	// clear the data array each render cycle.
-	memset(dataArray, 0, sizeof(dataArray));
-
 	printPixel(xpos,ypos);
 	xpos++;
 	ypos--;
@@ -110,9 +112,11 @@ void display_update(void) {
 	if(ypos<1) {
 		ypos = 32;
 	}
-
+	// render buffer.
 	int i;
 	for(i=0; i<DATA_ARRAY_SIZE; i++) {
 		sendSPI(dataArray[i]);
 	}
+	// clear render buffer after each render cycle.
+	memset(dataArray, 0, sizeof(dataArray));
 }
