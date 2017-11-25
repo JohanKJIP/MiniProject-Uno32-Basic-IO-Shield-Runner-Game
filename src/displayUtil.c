@@ -18,6 +18,9 @@
 #define DISPLAY_TURN_OFF_VDD (PORTFSET = 0x40)
 #define DISPLAY_TURN_OFF_VBAT (PORTFSET = 0x20)
 
+#define DATA_ARRAY_SIZE 512
+uint8_t dataArray[512];
+
 /**
  * Function to sleep X cycles.
  * @param cycles
@@ -35,7 +38,14 @@ void sendSPI(uint8_t data) {
 	while(!(SPI2STAT & 0x08));
 	SPI2BUF = data;
 	while(!(SPI2STAT & 1));
-	return SPI2BUF;
+}
+
+void printPixel(int x, int y) {
+	int yOffset = y % 8;         //array pos value (0-8, where 0 is upper pixel, 8 is lowest pixel)
+	int page = y / 8;        //page position index
+	int arrayPos = page*128 + x; //position in the array (0-512)
+	/* OR  wanted pixel with the current value in the column. (1 = 0x1, 2 = 0x10, 3 = 0x100 ...) */
+	dataArray[arrayPos] = dataArray[arrayPos] | (0x1<<yOffset);
 }
 
 /**
@@ -65,70 +75,44 @@ void display_init(void) {
     sendSPI(0xA1);
     sendSPI(0xC8);
 
-    sendSPI(0xDA);
+    sendSPI(0xDA); //some com pins thing?
     sendSPI(0x20);
 
-    sendSPI(0xAF);
+	sendSPI(0x20); //set addressing mode.
+	sendSPI(0x0);  //horizontal addressing mode.
+
+    sendSPI(0xAF); //turn on display.
+	sleep(100);
+	DISPLAY_CHANGE_TO_DATA_MODE;
 }
 
-void displayPixel(int x, int y) {
-    sendSPI(x+y*8);
+void memset(void *arr, int val, int size) {
+	if (size) {
+		char *d = arr;
+     	do {
+          *d++ = val;
+	  } while (--size);
+   }
 }
 
-void display_string(int line, char *s) {
-	int i;
-	if(line < 0 || line >= 4)
-		return;
-	if(!s)
-		return;
-
-	for(i = 0; i < 16; i++)
-		if(*s) {
-			textbuffer[line][i] = *s;
-			s++;
-		} else
-			textbuffer[line][i] = ' ';
-}
-
-void display_image(int x, const uint8_t *data) {
-	int i, j;
-
-	for(i = 0; i < 4; i++) {
-		DISPLAY_CHANGE_TO_COMMAND_MODE;
-
-        sendSPI(0x22);
-        sendSPI(i);
-
-        sendSPI(x & 0xF);
-        sendSPI(0x10 | ((x >> 4) & 0xF));
-
-		DISPLAY_CHANGE_TO_DATA_MODE;
-
-		for(j = 0; j < 32; j++)
-            sendSPI(~data[i*32 + j]);
-	}
-}
-
+int xpos = 0;
+int ypos = 32;
 void display_update(void) {
-	int i, j, k;
-	int c;
-	for(i = 0; i < 4; i++) {
-		DISPLAY_CHANGE_TO_COMMAND_MODE;
-        sendSPI(0x22);
-        sendSPI(i);
+	// clear the data array each render cycle.
+	memset(dataArray, 0, sizeof(dataArray));
 
-        sendSPI(0x0);
-        sendSPI(0x10);
+	printPixel(xpos,ypos);
+	xpos++;
+	ypos--;
+	if(xpos>127) {
+		xpos = 0;
+	}
+	if(ypos<1) {
+		ypos = 32;
+	}
 
-		DISPLAY_CHANGE_TO_DATA_MODE;
-
-		for(j = 0; j < 16; j++) {
-			c = textbuffer[i][j];
-			if(c & 0x80)
-				continue;
-
-			for(k = 0; k < 8; k++)
-                sendSPI(font[c*8 + k]);
-		}
+	int i;
+	for(i=0; i<DATA_ARRAY_SIZE; i++) {
+		sendSPI(dataArray[i]);
 	}
 }

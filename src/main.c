@@ -10,8 +10,10 @@
 #include <stdint.h>   /* Declarations of uint_32 and the like */
 #include <pic32mx.h>  /* Declarations of system-specific addresses etc */
 #include "gameHeader.h"
-#include <time.h>   /*TODO */
+//#include <time.h>   /*TODO */
 #include <stdlib.h> /*TODO */
+
+#define FPS 60
 
 volatile int* ledp;
 /* Init basic functions */
@@ -46,7 +48,7 @@ int PAUSED = 2;
 int GAMEOVER = 3;
 
 int main(void) {
-    srand(time(NULL));
+    //srand(time(NULL));
     int GAMESTATE = RUNNING;
         /*
 	  This will set the peripheral bus clock to the same frequency
@@ -96,7 +98,7 @@ int main(void) {
 	init(); /* Do any lab-specific initialization */
 	while( 1 ) {
         if(GAMESTATE == RUNNING) {
-            updateRunning();
+            updateRunning(FPS);
         } else if(GAMESTATE == PAUSED) {
 
         } else if(GAMESTATE == GAMEOVER) {

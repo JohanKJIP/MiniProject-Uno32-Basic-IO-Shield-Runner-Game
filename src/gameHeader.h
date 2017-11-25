@@ -48,7 +48,7 @@ int getsw(void);
 void enable_interrupt(void);
 
 /* Functions from Main.c */
-void updateRunning(void);
+void updateRunning(int);
 extern int GAMESTATE;
 
 /* Functions from gameRunning.c */
