@@ -3,8 +3,7 @@
 #include "gameHeader.h"
 
 int getsw(void) {
-    int TEMPPORT = PORTD;
-    return (TEMPPORT & 0xF00) >> 8;
+    return (PORTD & 0xF00) >> 8;
 }
 
 int getbtns(void) {

@@ -37,10 +37,9 @@ void init( void ) {
     /* timer interrupt enable */
     IEC(0) |= 0x100;    //enable interrupt flag
     IPC(2) |= 0x1f;     //set priority
-    /*switch interrupt enable */
-    IEC(0) |= 0x800;    //bit 11 enable interrupt
-    IPC(2) |= 0x1E000000; //bit 24-28
     enable_interrupt(); //enable global interrupt
+
+    entity_init();
 }
 
 int RUNNING = 1;
@@ -95,7 +94,7 @@ int main(void) {
 	display_init();
 	display_update();
 
-	init(); /* Do any lab-specific initialization */
+	init(); /* Do any game-specific initialization */
 	while( 1 ) {
         if(GAMESTATE == RUNNING) {
             updateRunning(FPS);

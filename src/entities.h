@@ -1,3 +1,5 @@
+void entity_init(void);
+
 /* structs */
 typedef enum EntityType {
     PLAYER, OBSTACLE, STONE, BIRD

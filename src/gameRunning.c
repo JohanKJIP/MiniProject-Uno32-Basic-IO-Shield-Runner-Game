@@ -5,7 +5,6 @@
 #include <stdint.h>
 #include <pic32mx.h>
 #include "gameHeader.h"
-#include <stdlib.h>
 
 #define PROCESSOR_SPEED 800000
 
@@ -87,7 +86,7 @@ void updateRunning(FPS) {
 void updatePaused(FPS) {
     accumulator++;
     if(accumulator > (PROCESSOR_SPEED/FPS)) {
-        setDataArray(border);
+        //setDataArray(border);
         accumulator = 0;
     }
 }
