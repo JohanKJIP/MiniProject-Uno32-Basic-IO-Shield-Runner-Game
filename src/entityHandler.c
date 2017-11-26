@@ -2,21 +2,37 @@
 #include "entities.h"
 #include "gameHeader.h"
 
-#define PLAYERX 10
-Player player;              //player entity
-Obstacle obstacles[3];      //obstacle array
+#define PLAYER_X 10
+#define FLOOR_Y 31
+Player player;                      //player entity
+
+/* obstacle variable */
+#define MAX_OBSTACLE_AMOUNT 10
+Obstacle obstacles[MAX_OBSTACLE_AMOUNT];         //obstacle array
+int obstacleAmount = 0;
 
 /* jump variables */
-int jumpDelta = 10;
+int jumpDelta = 10;                 //should be incremented by timer later on
 
 void entity_init() {
     player.type = PLAYER;
-    player.y = 31; //floor
+    player.y = FLOOR_Y; //floor level
     player.playerScore = 0;
     player.jumping = 0;
     player.legDown = 0;
+    player.hitbox.width = 10;       //preliminary width
+    player.hitbox.height = 25;      //preliminary height
 
     //TODO Create obstacle storage datastructure.
+}
+
+/* add obstacle to array */
+void add_obstacle(){
+    if(obstacleAmount < MAX_OBSTACLE_AMOUNT){
+        Obstacle obstacle = { .type = OBSTACLE, .x = 130, .y = FLOOR_Y, .hitbox = { .width = 10, .height = 10} }; //TODO randomize size
+        obstacles[obstacleAmount] = obstacle;
+        obstacleAmount ++;
+    }
 }
 
 void render(EntityType_t type, int x, int y) {
@@ -53,7 +69,7 @@ void updatePlayer() {
     }
 
     //checkCollisions(); //TODO
-    render(PLAYER,PLAYERX,player.y);
+    render(PLAYER,PLAYER_X,player.y);
 }
 
 void updateObstacles() {
