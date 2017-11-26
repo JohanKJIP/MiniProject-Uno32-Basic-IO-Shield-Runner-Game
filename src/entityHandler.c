@@ -3,7 +3,11 @@
 #include "gameHeader.h"
 
 #define PLAYERX 10
-Player player;
+Player player;              //player entity
+Obstacle obstacles[3];      //obstacle array
+
+/* jump variables */
+int jumpDelta = 10;
 
 void entity_init() {
     player.type = PLAYER;
@@ -33,12 +37,21 @@ void render(EntityType_t type, int x, int y) {
     }
 }
 
+/* jumping function */
+void playerJump() {
+    player.y += (-0.5) * (jumpDelta * (jumpDelta - 10));
+}
+
 void updatePlayer() {
     //get switches buttons, check correct answer etc.etc.
     //check collissions etc.etc.
-    if(getsw() == 0101) {
-        //playerJump(); //TODO
+    if(getsw() == 0101 && jumpDelta >= 10) {
+        jumpDelta = 0;
     }
+    if(jumpDelta < 10){
+        playerJump();
+    }
+
     //checkCollisions(); //TODO
     render(PLAYER,PLAYERX,player.y);
 }
