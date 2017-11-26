@@ -100,7 +100,7 @@ int main(void) {
         if(GAMESTATE == RUNNING) {
             updateRunning(FPS);
         } else if(GAMESTATE == PAUSED) {
-
+            updatePaused(FPS);
         } else if(GAMESTATE == GAMEOVER) {
 
         }

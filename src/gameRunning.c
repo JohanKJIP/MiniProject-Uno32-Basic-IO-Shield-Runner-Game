@@ -82,3 +82,12 @@ void updateRunning(FPS) {
         accumulator = 0;
     }
 }
+/* Code duplication!
+*/
+void updatePaused(FPS) {
+    accumulator++;
+    if(accumulator > (PROCESSOR_SPEED/FPS)) {
+        setDataArray(border);
+        accumulator = 0;
+    }
+}

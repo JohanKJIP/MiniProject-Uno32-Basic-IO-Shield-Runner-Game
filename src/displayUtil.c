@@ -129,3 +129,7 @@ void display_update(void) {
 	// clear render buffer after each render cycle
 	memset(dataArray, 0, sizeof(dataArray));
 }
+
+void setDataArray(int *array) {
+	*dataArray = *array;
+}
