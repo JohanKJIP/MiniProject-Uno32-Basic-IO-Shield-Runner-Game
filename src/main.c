@@ -42,13 +42,10 @@ void init( void ) {
     entity_init();
 }
 
-int RUNNING = 1;
-int PAUSED = 2;
-int GAMEOVER = 3;
+int GAMESTATE = 1;
 
 int main(void) {
     //srand(time(NULL));
-    int GAMESTATE = RUNNING;
         /*
 	  This will set the peripheral bus clock to the same frequency
 	  as the sysclock. That means 80 MHz, when the microcontroller
@@ -96,11 +93,11 @@ int main(void) {
 
 	init(); /* Do any game-specific initialization */
 	while( 1 ) {
-        if(GAMESTATE == RUNNING) {
+        if(GAMESTATE == 1) {
             updateRunning(FPS);
-        } else if(GAMESTATE == PAUSED) {
+        } else if(GAMESTATE == 2) {
             updatePaused(FPS);
-        } else if(GAMESTATE == GAMEOVER) {
+        } else if(GAMESTATE == 3) {
 
         }
 	}

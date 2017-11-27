@@ -97,13 +97,15 @@ void display_init(void) {
 /**
  * Memset function from string.h (import didn't work).
  */
-void memset(void *arr, int val, int size) {
-	if (size) {
-		char *d = arr;
-     	do {
-          *d++ = val;
-	  } while (--size);
-   }
+void setMemory(int val, int size) {
+	int i;
+	for (i = 0; i<size; i++) {
+		if(i>=384) {
+			dataArray[i] = 128;
+		} else {
+			dataArray[i] = 0;
+		}
+	}
 }
 
 /**
@@ -116,7 +118,7 @@ void display_update(void) {
 		sendSPI(dataArray[i]);
 	}
 	// clear render buffer after each render cycle
-	memset(dataArray, 0, sizeof(dataArray));
+	setMemory(0, sizeof(dataArray));
 }
 
 void setDataArray(int *array) {

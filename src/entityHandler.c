@@ -3,7 +3,7 @@
 #include "gameHeader.h"
 
 #define PLAYER_X 10
-#define FLOOR_Y 31
+#define FLOOR_Y 29
 Player player;                      //player entity
 
 /* obstacle variable */
@@ -17,6 +17,14 @@ int jumpDelta = 60;                 //should be incremented by timer later on
 /* counters */
 int legCounter = 0;
 
+/* add obstacle to array */
+void add_obstacle(){
+    if(obstacleAmount < MAX_OBSTACLE_AMOUNT){
+        Obstacle obstacle = { .type = STONE, .x = 129, .y = FLOOR_Y, .hitbox = { .width = 3, .height = 3} }; //TODO randomize size
+        obstacles[0] = obstacle;
+    }
+}
+
 void entity_init() {
     player.type = PLAYER;
     player.y = FLOOR_Y; //floor level
@@ -27,15 +35,6 @@ void entity_init() {
     player.hitbox.height = 25;      //preliminary height
 
     add_obstacle();
-}
-
-/* add obstacle to array */
-void add_obstacle(){
-    if(obstacleAmount < MAX_OBSTACLE_AMOUNT){
-        Obstacle obstacle = { .type = STONE, .x = 129, .y = FLOOR_Y, .hitbox = { .width = 3, .height = 3} }; //TODO randomize size
-        obstacles[0] = obstacle;
-        obstacleAmount ++;
-    }
 }
 
 /* render player animations */
@@ -69,10 +68,10 @@ void render(EntityType_t type, int x, int y) {
    player and obstacles */
 checkCollisions(){
     int i;
-    for(i = 0; i < obstacleAmount; i++){
-        if(PLAYER_X < obstacles[i].x && (PLAYER_X + player.hitbox.width) > obstacles[i].x){
-            if(player.y < obstacles[i].y && (player.y + player.hitbox.height) > obstacles[i].y){
-                //GAMESTATE = GAMEOVER;
+    for(i = 0; i < 1; i++){
+        if(PLAYER_X == obstacles[i].x || PLAYER_X == obstacles[i].x + obstacles[i].hitbox.width) {
+            if(player.y > obstacles[i].y - obstacles[i].hitbox.height) {
+                GAMESTATE = 2;
             }
         }
     }
@@ -107,9 +106,6 @@ void updatePlayer() {
         player.legDown = 0;
         legCounter = 0;
     }
-    //checkCollisions();
-
-    render(PLAYER,PLAYER_X,player.y);
 }
 
 void updateObstacles() {
@@ -118,14 +114,20 @@ void updateObstacles() {
     //render obstacles
     //spawn new ones?
     if(obstacles[0].x < -2){
-        add_obstacle();
+        obstacles[0].x = 128;
     }
     obstacles[0].x -= 1;
-
-    render(obstacles[0].type, obstacles[0].x, obstacles[0].y);
 }
 
 void entities_update() {
-    updatePlayer();
-    updateObstacles();
+    if(GAMESTATE == 1) {
+        updatePlayer();
+        updateObstacles();
+        checkCollisions();
+        render(obstacles[0].type, obstacles[0].x, obstacles[0].y);
+        render(PLAYER,PLAYER_X,player.y);
+    } else {
+        render(obstacles[0].type, obstacles[0].x, obstacles[0].y);
+        render(PLAYER,PLAYER_X,player.y);
+    }
 }
