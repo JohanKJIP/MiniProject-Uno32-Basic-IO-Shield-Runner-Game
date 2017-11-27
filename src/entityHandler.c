@@ -80,10 +80,10 @@ checkCollisions(){
 
 /* jumping function */
 void playerJump() {
-    if(jumpDelta >= 60) {
+    if(jumpDelta >= 60 && getbtns() == 4) {
         jumpDelta = 0;
         player.jumping = 1;
-    } else if(jumpDelta >= 60) {
+    } else if(jumpDelta >= 60 && getbtns() == 2) {
         //crouch
     } else if(jumpDelta <= 60 && player.y < (FLOOR_Y + 1)) {
         player.y += (0.2) * (jumpDelta/4 * (jumpDelta/4 - 4));
