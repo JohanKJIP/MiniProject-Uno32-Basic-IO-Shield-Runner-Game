@@ -46,7 +46,7 @@ void sendSPI(uint8_t data) {
  * @param int y position.
  */
 void displayPixel(int x, int y) {
-	if(x<128 && y<32) {
+	if(x<128 && y<32 && !(x < 0) && !(y < 0)) {
 		int yOffset = y % 8;            // array pos value (0-8, where 0 is upper pixel, 8 is lowest pixel)
 		int page = y / 8;               // page position index
 		int arrayPos = page*128 + x;    // position in the array (0-512)

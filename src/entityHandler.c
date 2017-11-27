@@ -26,14 +26,14 @@ void entity_init() {
     player.hitbox.width = 10;       //preliminary width
     player.hitbox.height = 25;      //preliminary height
 
-    //TODO Create obstacle storage datastructure.
+    add_obstacle();
 }
 
 /* add obstacle to array */
 void add_obstacle(){
     if(obstacleAmount < MAX_OBSTACLE_AMOUNT){
-        Obstacle obstacle = { .type = OBSTACLE, .x = 130, .y = FLOOR_Y, .hitbox = { .width = 10, .height = 10} }; //TODO randomize size
-        obstacles[obstacleAmount] = obstacle;
+        Obstacle obstacle = { .type = STONE, .x = 129, .y = FLOOR_Y, .hitbox = { .width = 3, .height = 3} }; //TODO randomize size
+        obstacles[0] = obstacle;
         obstacleAmount ++;
     }
 }
@@ -60,7 +60,7 @@ void render(EntityType_t type, int x, int y) {
             //TODO Make bird pixel art
             break;
         case STONE:
-            //TODO Make stone pixel art
+            renderStone(x, y);
             break;
     }
 }
@@ -85,7 +85,7 @@ void playerJump() {
         player.jumping = 1;
     } else if(jumpDelta >= 60 && getbtns() == 2) {
         //crouch
-    } else if(jumpDelta <= 60 && player.y < (FLOOR_Y + 1)) {
+    } else if(jumpDelta < 60 && player.y < (FLOOR_Y + 1)) {
         player.y += (0.2) * (jumpDelta/4 * (jumpDelta/4 - 4));
         jumpDelta++;
     } else{
@@ -117,6 +117,12 @@ void updateObstacles() {
     //update obstacle array
     //render obstacles
     //spawn new ones?
+    if(obstacles[0].x < -2){
+        add_obstacle();
+    }
+    obstacles[0].x -= 1;
+
+    render(obstacles[0].type, obstacles[0].x, obstacles[0].y);
 }
 
 void entities_update() {

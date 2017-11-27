@@ -71,3 +71,16 @@ void renderJumping(int x, int y){
     displayPixel(x+3,y);
     displayPixel(x+3,y-1);
 }
+
+/* render stone animation */
+void renderStone(int x, int y){
+    displayPixel(x,y);
+    displayPixel(x,y-1);
+    displayPixel(x,y-2);
+    displayPixel(x+1,y);
+    displayPixel(x+1,y-1);
+    displayPixel(x+1,y-2);
+    displayPixel(x+2,y);
+    displayPixel(x+2,y-1);
+    displayPixel(x+2,y-2);
+}
