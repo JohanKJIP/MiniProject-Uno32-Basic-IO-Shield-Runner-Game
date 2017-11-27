@@ -12,7 +12,7 @@ Obstacle obstacles[MAX_OBSTACLE_AMOUNT];         //obstacle array
 int obstacleAmount = 0;
 
 /* jump variables */
-int jumpDelta = 10;                 //should be incremented by timer later on
+int jumpDelta = 60;                 //should be incremented by timer later on
 
 void entity_init() {
     player.type = PLAYER;
@@ -39,10 +39,18 @@ void render(EntityType_t type, int x, int y) {
     switch(type) {
         case PLAYER:
             //TODO Make character pixel art
-            displayPixel(x,y);
-            displayPixel(x,y-1);
-            displayPixel(x,y-2);
+            displayPixel(x,y-3);
+            displayPixel(x,y-4);
+            displayPixel(x+1,y);
             displayPixel(x+1,y-1);
+            displayPixel(x+1,y-2);
+            displayPixel(x+1,y-3);
+            displayPixel(x+1,y-4);
+            displayPixel(x+1,y-5);
+            displayPixel(x+2,y-2);
+            displayPixel(x+2,y-4);
+            displayPixel(x+3,y-1);
+            displayPixel(x+3,y-2);
             break;
         case BIRD:
             //TODO Make bird pixel art
@@ -55,20 +63,27 @@ void render(EntityType_t type, int x, int y) {
 
 /* jumping function */
 void playerJump() {
-    player.y += (-0.5) * (jumpDelta * (jumpDelta - 10));
+    //checka switches!
+    int buttons = getbtns();
+    if(jumpDelta >= 60 && buttons == 4) {
+        jumpDelta = 0;
+    } else if(jumpDelta >= 60 && buttons == 2) {
+        //crouch
+    }
+    //try to jump
+    if (jumpDelta < 60 && player.y < FLOOR_Y + 1) {
+        player.y += 0.2 * (jumpDelta/4 * (jumpDelta/4 - 4));
+        jumpDelta++;
+    } else {
+        player.y = FLOOR_Y;
+        jumpDelta = 60;
+    }
 }
 
 void updatePlayer() {
-    //get switches buttons, check correct answer etc.etc.
     //check collissions etc.etc.
-    if(getsw() == 0101 && jumpDelta >= 10) {
-        jumpDelta = 0;
-    }
-    if(jumpDelta < 10){
-        playerJump();
-    }
-
     //checkCollisions(); //TODO
+    playerJump();
     render(PLAYER,PLAYER_X,player.y);
 }
 

@@ -109,18 +109,7 @@ void memset(void *arr, int val, int size) {
 /**
  * Update the display.
  */
-int xpos = 0;
-int ypos = 32;
 void display_update(void) {
-	displayPixel(xpos,ypos);
-	xpos++;
-	ypos--;
-	if(xpos>127) {
-		xpos = 0;
-	}
-	if(ypos<1) {
-		ypos = 32;
-	}
 	// send render buffer to screen
 	int i;
 	for(i=0; i<DATA_ARRAY_SIZE; i++) {
