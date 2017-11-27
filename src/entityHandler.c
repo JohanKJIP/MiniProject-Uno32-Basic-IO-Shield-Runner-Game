@@ -14,6 +14,9 @@ int obstacleAmount = 0;
 /* jump variables */
 int jumpDelta = 60;                 //should be incremented by timer later on
 
+/* counters */
+int legCounter = 0;
+
 void entity_init() {
     player.type = PLAYER;
     player.y = FLOOR_Y; //floor level
@@ -35,14 +38,23 @@ void add_obstacle(){
     }
 }
 
+/* render player animations */
+void renderPlayer(int x, int y){
+    if(player.legDown && !player.jumping) {
+        renderLegDown(x, y);
+    } else if(!player.legDown && !player.jumping){
+        renderLegUp(x, y);
+    } else {
+        renderJumping(x, y);
+    }
+}
+
+/* render entities */
 void render(EntityType_t type, int x, int y) {
     switch(type) {
         case PLAYER:
             //TODO Make character pixel art
-            displayPixel(x,y);
-            displayPixel(x,y-1);
-            displayPixel(x,y-2);
-            displayPixel(x+1,y-1);
+            renderPlayer(x, y);
             break;
         case BIRD:
             //TODO Make bird pixel art
@@ -56,20 +68,21 @@ void render(EntityType_t type, int x, int y) {
 /* check for collision between
    player and obstacles */
 checkCollisions(){
-    for(int i = 0; i < obstacleAmount; i++){
-        if(PLAYER_X < obstacles[i].x && (PLAYER_X + player.width) > obstacles[i].x){
-            if(player.y < obstacles[i].y && (player.y + player.height) > obstacles[i].y){
+    int i;
+    for(i = 0; i < obstacleAmount; i++){
+        if(PLAYER_X < obstacles[i].x && (PLAYER_X + player.hitbox.width) > obstacles[i].x){
+            if(player.y < obstacles[i].y && (player.y + player.hitbox.height) > obstacles[i].y){
                 //GAMESTATE = GAMEOVER;
             }
         }
     }
 }
 
-
 /* jumping function */
 void playerJump() {
     if(jumpDelta >= 60) {
         jumpDelta = 0;
+        player.jumping = 1;
     } else if(jumpDelta >= 60) {
         //crouch
     } else if(jumpDelta <= 60 && player.y < (FLOOR_Y + 1)) {
@@ -78,6 +91,7 @@ void playerJump() {
     } else{
         player.y = FLOOR_Y;
         jumpDelta = 60;
+        player.jumping = 0;
     }
 }
 
@@ -86,6 +100,13 @@ void updatePlayer() {
     //check collissions etc.etc.
     playerJump();
 
+    legCounter++;
+    if(legCounter == 10){
+        player.legDown = 1;
+    } else if(legCounter == 20){
+        player.legDown = 0;
+        legCounter = 0;
+    }
     //checkCollisions();
 
     render(PLAYER,PLAYER_X,player.y);
