@@ -12,7 +12,7 @@ Obstacle obstacles[MAX_OBSTACLE_AMOUNT];         //obstacle array
 int obstacleAmount = 0;
 
 /* jump variables */
-int jumpDelta = 10;                 //should be incremented by timer later on
+int jumpDelta = 60;                 //should be incremented by timer later on
 
 void entity_init() {
     player.type = PLAYER;
@@ -53,22 +53,41 @@ void render(EntityType_t type, int x, int y) {
     }
 }
 
+/* check for collision between
+   player and obstacles */
+checkCollisions(){
+    for(int i = 0; i < obstacleAmount; i++){
+        if(PLAYER_X < obstacles[i].x && (PLAYER_X + player.width) > obstacles[i].x){
+            if(player.y < obstacles[i].y && (player.y + player.height) > obstacles[i].y){
+                //GAMESTATE = GAMEOVER;
+            }
+        }
+    }
+}
+
+
 /* jumping function */
 void playerJump() {
-    player.y += (-0.5) * (jumpDelta * (jumpDelta - 10));
+    if(jumpDelta >= 60) {
+        jumpDelta = 0;
+    } else if(jumpDelta >= 60) {
+        //crouch
+    } else if(jumpDelta <= 60 && player.y < (FLOOR_Y + 1)) {
+        player.y += (0.2) * (jumpDelta/4 * (jumpDelta/4 - 4));
+        jumpDelta++;
+    } else{
+        player.y = FLOOR_Y;
+        jumpDelta = 60;
+    }
 }
 
 void updatePlayer() {
     //get switches buttons, check correct answer etc.etc.
     //check collissions etc.etc.
-    if(getsw() == 0101 && jumpDelta >= 10) {
-        jumpDelta = 0;
-    }
-    if(jumpDelta < 10){
-        playerJump();
-    }
+    playerJump();
 
-    //checkCollisions(); //TODO
+    //checkCollisions();
+
     render(PLAYER,PLAYER_X,player.y);
 }
 
