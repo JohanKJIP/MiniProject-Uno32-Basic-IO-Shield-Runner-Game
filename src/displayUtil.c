@@ -121,19 +121,10 @@ void setMemory(int val, int size) {
 	}
 }
 
-int k = 0;
 /**
  * Update the display.
  */
 void display_update(void) {
-	int j;
-	for (j = 0; j < 32; j++) {
-		displayPixel(k,j);
-	}
-	k++;
-	if(k>127) {
-		k=0;
-	}
 	// send render buffer to screen
 	int i;
 	for(i=0; i<DATA_ARRAY_SIZE; i++) {
