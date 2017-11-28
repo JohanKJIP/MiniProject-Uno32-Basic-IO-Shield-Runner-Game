@@ -110,7 +110,7 @@ void display_init(void) {
 /**
  * set memory with a val
  */
-void setFloorScreen(int val, int size) {
+void gameScreen(int val, int size) {
 	int i;
 	for (i = 0; i<size; i++) {
 		if(i>=384) {
@@ -121,7 +121,7 @@ void setFloorScreen(int val, int size) {
 	}
 }
 
-void setBorderScreen(int val, int size) {
+void mainMenuScreen(int val, int size) {
 	int i;
 	for (i = 0; i<size; i++) {
 		if(i<128) {
@@ -132,6 +132,18 @@ void setBorderScreen(int val, int size) {
 		}
 		if (i==0 || i==127 || i==128 || i==255 || i==256 || i==383 || i==384 || i==511) {
 			dataArray[i] = 0xff;
+		}
+	}
+}
+
+void gameOverScreen(int val, int size) {
+	int i;
+	for (i = 0; i<size; i++) {
+		if(i<128) {
+			dataArray[i] = 0x1;
+		}
+		if(i>384) {
+			dataArray[i] = 0x80;
 		}
 	}
 }
@@ -148,10 +160,13 @@ void display_update(void) {
 	// clear render buffer after each render cycle
 	switch (GAMESTATE) {
 		case 1:
-			setBorderScreen(0, sizeof(dataArray));
+			mainMenuScreen(0, sizeof(dataArray));
 			break;
 		case 2:
-			setFloorScreen(0, sizeof(dataArray));
+			gameScreen(0, sizeof(dataArray));
+			break;
+		case 3:
+			gameOverScreen(0, sizeof(dataArray));
 			break;
 	}
 

@@ -103,7 +103,7 @@ int main(void) {
             } else if(GAMESTATE == 2) {
                 updateRunning();
             } else if(GAMESTATE == 3) {
-
+                updateGameOver();
             }
             accumulator = 0;
         }

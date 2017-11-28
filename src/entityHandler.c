@@ -55,11 +55,9 @@ void renderPlayer(int x, int y){
 void render(EntityType_t type, int x, int y) {
     switch(type) {
         case PLAYER:
-            //TODO Make character pixel art
             renderPlayer(x, y);
             break;
         case BIRD:
-            //TODO Make bird pixel art
             break;
         case STONE:
             renderStone(x, y);
@@ -74,7 +72,8 @@ checkCollisions(){
     for(i = 0; i < 1; i++){
         if(PLAYER_X == obstacles[i].x || PLAYER_X == obstacles[i].x + obstacles[i].hitbox.width) {
             if(player.y > obstacles[i].y - obstacles[i].hitbox.height) {
-                GAMESTATE = 1;
+                GAMESTATE = 3;
+                obstacles[i].x = 129;
             }
         }
     }
@@ -124,6 +123,8 @@ void updateObstacles() {
 
 void updateBackground(){
     renderCloud(128 - cloudX);
+    renderCloud(150 - cloudX);
+    renderCloud(200 - cloudX);
     backgroundCounter++;
     if(backgroundCounter > 129){
         backgroundCounter = 0;
@@ -140,7 +141,7 @@ void updateBackground(){
     }
     if(particleX == 0)
         particleX = 128;
-    if(cloudX > 128 + 6) //128 + cloud width
+    if(cloudX > 200 + 6) //128 + cloud width
         cloudX = 0;
 }
 

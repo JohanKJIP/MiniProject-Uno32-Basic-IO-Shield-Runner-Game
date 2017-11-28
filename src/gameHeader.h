@@ -15,6 +15,7 @@ void enable_interrupt(void);
 /* Functions from Main.c */
 void updateRunning();
 void updateMainMenu();
+void updateGameOver();
 extern int GAMESTATE;
 
 /* Functions from gameRunning.c */

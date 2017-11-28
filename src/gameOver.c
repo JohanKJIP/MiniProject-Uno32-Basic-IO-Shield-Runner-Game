@@ -4,8 +4,9 @@
 
 /* Code duplication!
 */
-void updateMainMenu() {
+void updateGameOver() {
     display_update();
+    sleep(1000000);
     if(getbtns() != 0)
-        GAMESTATE = 2;
+        GAMESTATE = 1;
 }
