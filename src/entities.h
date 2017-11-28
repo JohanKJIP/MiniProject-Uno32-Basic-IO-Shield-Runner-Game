@@ -84,3 +84,16 @@ void renderStone(int x, int y){
     displayPixel(x+2,y-1);
     displayPixel(x+2,y-2);
 }
+
+/* render cloud */
+void renderCloud(int x){
+    /*
+    displayHex(x, 1, 0x1);
+    displayHex(x+1, 1, 0x1);
+    displayHex(x+2, 1, 0x11);
+    displayHex(x+3, 1, 0x111);
+    displayHex(x+4, 1, 0x11);
+    displayHex(x+5, 1, 0x11);
+    displayHex(x+6, 1, 0x1);
+    */
+}
