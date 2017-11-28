@@ -16,6 +16,7 @@ int jumpDelta = 60;                 //should be incremented by timer later on
 
 /* counters */
 int legCounter = 0;
+int backgroundCounter = 129;
 
 /* add obstacle to array */
 void add_obstacle(){
@@ -117,6 +118,13 @@ void updateObstacles() {
         obstacles[0].x = 128;
     }
     obstacles[0].x -= 1;
+}
+
+void updateBackground(){
+    backgroundCounter--;
+    renderCloud(backgroundCounter);
+    if(backgroundCounter == 0)
+        backgroundCounter = 129;
 }
 
 void entities_update() {
