@@ -126,8 +126,5 @@ void entities_update() {
         checkCollisions();
         render(obstacles[0].type, obstacles[0].x, obstacles[0].y);
         render(PLAYER,PLAYER_X,player.y);
-    } else {
-        render(obstacles[0].type, obstacles[0].x, obstacles[0].y);
-        render(PLAYER,PLAYER_X,player.y);
     }
 }

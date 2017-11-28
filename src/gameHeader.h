@@ -2,6 +2,7 @@
 
 /* Display-related functions from displayUtil.c */
 void displayPixel(int x, int y);
+void displayHex(int x, int line, int value);
 void display_init(void);
 void display_update(void);
 void sleep(int);
@@ -13,7 +14,7 @@ void enable_interrupt(void);
 
 /* Functions from Main.c */
 void updateRunning(int);
-void updatePaused(int);
+void updateMainMenu(int);
 extern int GAMESTATE;
 
 /* Functions from gameRunning.c */

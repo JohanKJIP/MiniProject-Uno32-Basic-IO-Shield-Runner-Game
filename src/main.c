@@ -14,6 +14,7 @@
 #include <stdlib.h> /*TODO */
 
 #define FPS 60
+#define PROCESSOR_SPEED 3200000
 
 volatile int* ledp;
 /* Init basic functions */
@@ -92,13 +93,19 @@ int main(void) {
 	display_update();
 
 	init(); /* Do any game-specific initialization */
-	while( 1 ) {
-        if(GAMESTATE == 1) {
-            updateRunning(FPS);
-        } else if(GAMESTATE == 2) {
-            updatePaused(FPS);
-        } else if(GAMESTATE == 3) {
 
+    int accumulator = 0; // used to control update speed
+	while( 1 ) {
+        accumulator++;
+        if(accumulator > (PROCESSOR_SPEED/FPS)) {
+            if(GAMESTATE == 2) {
+                updateMainMenu(FPS);
+            } else if(GAMESTATE == 1) {
+                updateRunning(FPS);
+            } else if(GAMESTATE == 3) {
+
+            }
+            accumulator = 0;
         }
 	}
 	return 0;

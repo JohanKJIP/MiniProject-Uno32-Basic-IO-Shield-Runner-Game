@@ -57,6 +57,18 @@ void displayPixel(int x, int y) {
 }
 
 /**
+ * Add a hex to the render buffer.
+ * @param int x position.
+ * @param int line (page on the display ram).
+ * @param int value to send.
+ */
+void displayHex(int x, int line, int value) {
+	if(x<128 && x>=0 && line >= 0 && line < 4) {
+		dataArray[x + 128*line] |= value;
+	}
+}
+
+/**
  * Initialise display.
  */
 void display_init(void) {
