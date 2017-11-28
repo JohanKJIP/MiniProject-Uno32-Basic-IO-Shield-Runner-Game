@@ -51,8 +51,8 @@ void displayPixel(int x, int y) {
 		int page = y / 8;               // page position index
 		int arrayPos = page*128 + x;    // position in the array (0-512)
 
-		/* OR pixel with current value in the column. (1 = 0x1, 2 = 0x10, 3 = 0x100 ...) */
-		dataArray[arrayPos] = dataArray[arrayPos] | (0x1<<yOffset);
+		/* OR pixel with current value in the column. (1 = 1, 2 = 10, 3 = 100 ...) */
+		dataArray[arrayPos] = dataArray[arrayPos] | (0x1 << yOffset);
 	}
 }
 
@@ -64,7 +64,8 @@ void displayPixel(int x, int y) {
  */
 void displayHex(int x, int line, int value) {
 	if(x<128 && x>=0 && line >= 0 && line < 4) {
-		dataArray[x + 128*line] |= value;
+		int arrayPos = 128*line + x;
+		dataArray[arrayPos] = dataArray[arrayPos] | value;
 	}
 }
 
@@ -113,17 +114,26 @@ void setMemory(int val, int size) {
 	int i;
 	for (i = 0; i<size; i++) {
 		if(i>=384) {
-			dataArray[i] = 128;
+			dataArray[i] = 0x80;
 		} else {
 			dataArray[i] = 0;
 		}
 	}
 }
 
+int k = 0;
 /**
  * Update the display.
  */
 void display_update(void) {
+	int j;
+	for (j = 0; j < 32; j++) {
+		displayPixel(k,j);
+	}
+	k++;
+	if(k>127) {
+		k=0;
+	}
 	// send render buffer to screen
 	int i;
 	for(i=0; i<DATA_ARRAY_SIZE; i++) {

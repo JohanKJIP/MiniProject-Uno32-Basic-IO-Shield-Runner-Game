@@ -2,7 +2,7 @@
 
 /* Display-related functions from displayUtil.c */
 void displayPixel(int x, int y);
-void displayHex(int x, int line, int value);
+void displayHex(int,int,int);
 void display_init(void);
 void display_update(void);
 void sleep(int);

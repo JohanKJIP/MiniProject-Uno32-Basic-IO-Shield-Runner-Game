@@ -16,7 +16,7 @@ int jumpDelta = 60;                 //should be incremented by timer later on
 
 /* counters */
 int legCounter = 0;
-int backgroundCounter = 129;
+int backgroundCounter = 128;
 
 /* add obstacle to array */
 void add_obstacle(){
@@ -122,17 +122,21 @@ void updateObstacles() {
 
 void updateBackground(){
     backgroundCounter--;
+
     renderCloud(backgroundCounter);
-    if(backgroundCounter == 0)
-        backgroundCounter = 129;
+    if(backgroundCounter < -6)
+        backgroundCounter = 128;
 }
 
 void entities_update() {
-    if(GAMESTATE == 1) {
-        updatePlayer();
-        updateObstacles();
-        checkCollisions();
-        render(obstacles[0].type, obstacles[0].x, obstacles[0].y);
-        render(PLAYER,PLAYER_X,player.y);
+    updatePlayer();
+    updateObstacles();
+    updateBackground();
+    checkCollisions();
+    render(obstacles[0].type, obstacles[0].x, obstacles[0].y);
+    render(PLAYER,PLAYER_X,player.y);
+
+    if(getbtns() == 1) {
+        while(1);
     }
 }
