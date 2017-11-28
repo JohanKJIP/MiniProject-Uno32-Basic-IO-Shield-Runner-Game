@@ -61,8 +61,8 @@ void renderLegUp(int x, int y){
     displayPixel(x+2,y-4);
 }
 
-/* render jumping animation */
-void renderJumping(int x, int y){
+/* render first jumping animation */
+void renderJumpingGround(int x, int y){
     displayPixel(x+1,y-1);
     displayPixel(x+1,y-2);
     displayPixel(x+1,y-3);
@@ -71,6 +71,20 @@ void renderJumping(int x, int y){
     displayPixel(x+2,y-3);
     displayPixel(x+3,y);
     displayPixel(x+3,y-1);
+}
+
+/* render second jumping animation */
+void renderJumpingAir(int x, int y){
+    displayPixel(x,y-1);
+    displayPixel(x+1,y-1);
+    displayPixel(x+1,y-3);
+    displayPixel(x+1,y-4);
+    displayPixel(x+2,y-1);
+    displayPixel(x+2,y-2);
+    displayPixel(x+2,y-3);
+    displayPixel(x+2,y-4);
+    displayPixel(x+2,y-5);
+    displayPixel(x+3,y-4);
 }
 
 /* render stone animation */

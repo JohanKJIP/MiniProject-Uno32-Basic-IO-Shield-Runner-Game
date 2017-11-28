@@ -46,8 +46,10 @@ void renderPlayer(int x, int y){
         renderLegDown(x, y);
     } else if(!player.legDown && !player.jumping){
         renderLegUp(x, y);
+    } else if(player.jumping && player.y > 25){
+        renderJumpingGround(x, y);
     } else {
-        renderJumping(x, y);
+        renderJumpingAir(x, y);
     }
 }
 
@@ -102,9 +104,9 @@ void updatePlayer() {
     playerJump();
 
     legCounter++;
-    if(legCounter == 10){
+    if(legCounter == 5){
         player.legDown = 1;
-    } else if(legCounter == 20){
+    } else if(legCounter == 10){
         player.legDown = 0;
         legCounter = 0;
     }
