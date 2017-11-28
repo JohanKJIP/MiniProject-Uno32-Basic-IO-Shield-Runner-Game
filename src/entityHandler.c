@@ -16,7 +16,9 @@ int jumpDelta = 60;                 //should be incremented by timer later on
 
 /* counters */
 int legCounter = 0;
-int backgroundCounter = 128;
+int backgroundCounter = 0;
+int particleX = 128;
+int cloudX = 0;
 
 /* add obstacle to array */
 void add_obstacle(){
@@ -72,7 +74,7 @@ checkCollisions(){
     for(i = 0; i < 1; i++){
         if(PLAYER_X == obstacles[i].x || PLAYER_X == obstacles[i].x + obstacles[i].hitbox.width) {
             if(player.y > obstacles[i].y - obstacles[i].hitbox.height) {
-                GAMESTATE = 2;
+                GAMESTATE = 1;
             }
         }
     }
@@ -121,11 +123,25 @@ void updateObstacles() {
 }
 
 void updateBackground(){
-    backgroundCounter--;
+    renderCloud(128 - cloudX);
+    backgroundCounter++;
+    if(backgroundCounter > 129){
+        backgroundCounter = 0;
+    }
+    renderParticle(particleX - 100, 10);
+    renderParticle(particleX - 20, 3);
+    renderParticle(particleX - 120, 16);
 
-    renderCloud(backgroundCounter);
-    if(backgroundCounter < -6)
-        backgroundCounter = 128;
+    if(backgroundCounter % 2){
+        particleX--;
+    }
+    if(backgroundCounter % 4 == 0) {
+        cloudX++;
+    }
+    if(particleX == 0)
+        particleX = 128;
+    if(cloudX > 128 + 6) //128 + cloud width
+        cloudX = 0;
 }
 
 void entities_update() {
@@ -135,8 +151,4 @@ void entities_update() {
     checkCollisions();
     render(obstacles[0].type, obstacles[0].x, obstacles[0].y);
     render(PLAYER,PLAYER_X,player.y);
-
-    if(getbtns() == 1) {
-        while(1);
-    }
 }

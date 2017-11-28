@@ -13,8 +13,8 @@ int getsw(void);
 void enable_interrupt(void);
 
 /* Functions from Main.c */
-void updateRunning(int);
-void updateMainMenu(int);
+void updateRunning();
+void updateMainMenu();
 extern int GAMESTATE;
 
 /* Functions from gameRunning.c */

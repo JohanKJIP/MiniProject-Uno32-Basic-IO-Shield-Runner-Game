@@ -98,10 +98,10 @@ int main(void) {
 	while( 1 ) {
         accumulator++;
         if(accumulator > (PROCESSOR_SPEED/FPS)) {
-            if(GAMESTATE == 2) {
-                updateMainMenu(FPS);
-            } else if(GAMESTATE == 1) {
-                updateRunning(FPS);
+            if(GAMESTATE == 1) {
+                updateMainMenu();
+            } else if(GAMESTATE == 2) {
+                updateRunning();
             } else if(GAMESTATE == 3) {
 
             }

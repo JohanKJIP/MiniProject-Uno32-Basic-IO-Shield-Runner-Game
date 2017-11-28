@@ -49,7 +49,7 @@ int getRandomInt(int switchAmount){
 /**
  * Update game, this is the game loop.
  */
-void updateRunning(FPS) {
+void updateRunning() {
     entities_update();
     display_update();
 }

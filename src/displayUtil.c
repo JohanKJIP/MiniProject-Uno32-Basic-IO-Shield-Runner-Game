@@ -108,15 +108,30 @@ void display_init(void) {
 }
 
 /**
- * Memset function from string.h (import didn't work).
+ * set memory with a val
  */
-void setMemory(int val, int size) {
+void setFloorScreen(int val, int size) {
 	int i;
 	for (i = 0; i<size; i++) {
 		if(i>=384) {
 			dataArray[i] = 0x80;
 		} else {
 			dataArray[i] = 0;
+		}
+	}
+}
+
+void setBorderScreen(int val, int size) {
+	int i;
+	for (i = 0; i<size; i++) {
+		if(i<128) {
+			dataArray[i] = 0x1;
+		}
+		if(i>384) {
+			dataArray[i] = 0x80;
+		}
+		if (i==0 || i==127 || i==128 || i==255 || i==256 || i==383 || i==384 || i==511) {
+			dataArray[i] = 0xff;
 		}
 	}
 }
@@ -131,9 +146,13 @@ void display_update(void) {
 		sendSPI(dataArray[i]);
 	}
 	// clear render buffer after each render cycle
-	setMemory(0, sizeof(dataArray));
-}
+	switch (GAMESTATE) {
+		case 1:
+			setBorderScreen(0, sizeof(dataArray));
+			break;
+		case 2:
+			setFloorScreen(0, sizeof(dataArray));
+			break;
+	}
 
-void setDataArray(int *array) {
-	*dataArray = *array;
 }

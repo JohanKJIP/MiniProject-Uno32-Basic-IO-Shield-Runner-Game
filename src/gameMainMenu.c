@@ -5,5 +5,7 @@
 /* Code duplication!
 */
 void updateMainMenu(FPS) {
-    //do nothing.
+    display_update();
+    if(getbtns() != 0)
+        GAMESTATE = 2;
 }
