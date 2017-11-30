@@ -64,6 +64,18 @@ void displayHex(int x, int line, int value) {
 }
 
 /**
+* Set the contrast of the display to a value.
+*/
+void setContrast(int value) {
+	if(value > 0 && value < 256) {
+		DISPLAY_CHANGE_TO_COMMAND_MODE;
+		sendSPI(81);
+		sendSPI(value);
+		DISPLAY_CHANGE_TO_DATA_MODE;
+	}
+}
+
+/**
  * Draw a string on the display.
  */
 void displayString(int x, int line, char* string) {
