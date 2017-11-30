@@ -6,6 +6,7 @@ void displayHex(int,int,int);
 void display_init(void);
 void display_update(void);
 void sleep(int);
+uint8_t dataArray[512];
 
 /* Functions from utils.c */
 int getbtns(void);

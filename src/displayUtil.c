@@ -19,7 +19,6 @@
 #define DISPLAY_TURN_OFF_VBAT (PORTFSET = 0x20)
 
 #define DATA_ARRAY_SIZE 512
-uint8_t dataArray[512];
 
 /**
  * Function to sleep X cycles.
@@ -108,47 +107,6 @@ void display_init(void) {
 }
 
 /**
- * set memory with a val
- */
-void gameScreen(int val, int size) {
-	int i;
-	for (i = 0; i<size; i++) {
-		if(i>=384) {
-			dataArray[i] = 0x80;
-		} else {
-			dataArray[i] = 0;
-		}
-	}
-}
-
-void mainMenuScreen(int val, int size) {
-	int i;
-	for (i = 0; i<size; i++) {
-		if(i<128) {
-			dataArray[i] = 0x1;
-		}
-		if(i>384) {
-			dataArray[i] = 0x80;
-		}
-		if (i==0 || i==127 || i==128 || i==255 || i==256 || i==383 || i==384 || i==511) {
-			dataArray[i] = 0xff;
-		}
-	}
-}
-
-void gameOverScreen(int val, int size) {
-	int i;
-	for (i = 0; i<size; i++) {
-		if(i<128) {
-			dataArray[i] = 0x1;
-		}
-		if(i>384) {
-			dataArray[i] = 0x80;
-		}
-	}
-}
-
-/**
  * Update the display.
  */
 void display_update(void) {
@@ -157,17 +115,4 @@ void display_update(void) {
 	for(i=0; i<DATA_ARRAY_SIZE; i++) {
 		sendSPI(dataArray[i]);
 	}
-	// clear render buffer after each render cycle
-	switch (GAMESTATE) {
-		case 1:
-			mainMenuScreen(0, sizeof(dataArray));
-			break;
-		case 2:
-			gameScreen(0, sizeof(dataArray));
-			break;
-		case 3:
-			gameOverScreen(0, sizeof(dataArray));
-			break;
-	}
-
 }

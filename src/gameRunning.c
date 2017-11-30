@@ -47,9 +47,24 @@ int getRandomInt(int switchAmount){
 */
 
 /**
+ * set memory with a val
+*/
+void gameScreen(int val, int size) {
+	int i;
+	for (i = 0; i<size; i++) {
+		if(i>=384) {
+			dataArray[i] = 0x80;
+		} else {
+			dataArray[i] = 0;
+		}
+	}
+}
+
+/**
  * Update game, this is the game loop.
  */
 void updateRunning() {
+    gameScreen(0,512);
     entities_update();
     display_update();
 }

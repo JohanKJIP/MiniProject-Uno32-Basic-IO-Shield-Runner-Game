@@ -33,6 +33,7 @@ void entity_init() {
     player.y = FLOOR_Y; //floor level
     player.playerScore = 0;
     player.jumping = 0;
+    player.crouching = 0;
     player.legDown = 0;
     player.hitbox.width = 10;       //preliminary width
     player.hitbox.height = 25;      //preliminary height
@@ -87,7 +88,8 @@ void playerJump() {
         jumpDelta = 0;
         player.jumping = 1;
     } else if(jumpDelta >= 60 && getbtns() == 2) {
-        //crouch
+        player.crouching = 1;
+        player.hitbox.height = 3;
     } else if(jumpDelta < 60 && player.y < (FLOOR_Y + 1)) {
         player.y += (0.2) * (jumpDelta/4 * (jumpDelta/4 - 4));
         jumpDelta++;
@@ -95,6 +97,10 @@ void playerJump() {
         player.y = FLOOR_Y;
         jumpDelta = 60;
         player.jumping = 0;
+    }
+    if(getnbtns() != 2) {
+        player.crouching = 0;
+        player.hitbox.height = 10;
     }
 }
 

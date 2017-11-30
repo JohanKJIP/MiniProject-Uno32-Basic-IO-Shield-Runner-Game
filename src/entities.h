@@ -17,6 +17,7 @@ typedef struct Player {
     int y;
     int playerScore;
     int jumping;
+    int crouching;
     int legDown;
     Hitbox hitbox;
 } Player;
