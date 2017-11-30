@@ -114,11 +114,31 @@ void renderCloud(int x){
 
 /* render pixel */
 void renderParticle(int x, int y){
-    uint8_t movement[20] = {0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, -1, -1, -1, -1, -1};
-    int yIndex = x % 20;
+    int randomVals1[5] = {0, 0, 0, 0, 0};
+    int randomVals2[5] = {1, 1, 1, 1, 1};
+    int randomVals3[5] = {0, 0, 0, 0, 0};
+    int randomVals4[5] = {-1, -1, -1, -1, -1};
     if(x >= 0){
-        displayPixel(x, (y + movement[yIndex]));
+        int yIndex = x % 20;
+        if(yIndex < 5){
+            displayPixel(x, (y + randomVals1[yIndex]));
+        } else if (yIndex >= 6 && yIndex < 10){
+            displayPixel(x, (y + randomVals2[yIndex - 5]));
+        } else if (yIndex >= 10 && yIndex < 15){
+            displayPixel(x, (y + randomVals3[yIndex - 10]));
+        } else{
+            displayPixel(x, (y + randomVals4[yIndex - 15]));
+        }
     } else {
-        displayPixel(128 + x, (y + movement[yIndex]));
+        int yIndex = (128 + x) % 20;
+        if(yIndex < 5){
+            displayPixel(128 + x, (y + randomVals1[yIndex]));
+        } else if (yIndex >= 6 && yIndex < 10){
+            displayPixel(128 + x, (y + randomVals2[yIndex - 5]));
+        } else if (yIndex >= 10 && yIndex < 15){
+            displayPixel(128 + x, (y + randomVals3[yIndex - 10]));
+        } else{
+            displayPixel(128 + x, (y + randomVals4[yIndex - 15]));
+        }
     }
 }
