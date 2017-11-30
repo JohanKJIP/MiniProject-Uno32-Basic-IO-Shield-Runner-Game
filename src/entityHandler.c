@@ -98,7 +98,7 @@ void playerJump() {
         jumpDelta = 60;
         player.jumping = 0;
     }
-    if(getnbtns() != 2) {
+    if(getbtns() != 2) {
         player.crouching = 0;
         player.hitbox.height = 10;
     }

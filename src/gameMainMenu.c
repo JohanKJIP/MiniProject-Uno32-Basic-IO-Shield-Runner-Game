@@ -21,6 +21,7 @@ void mainMenuScreen(int val, int size) {
 */
 void updateMainMenu() {
     mainMenuScreen(0,512);
+    displayString(28,2,"ABC");
     display_update();
     if(getbtns() != 0)
         GAMESTATE = 2;

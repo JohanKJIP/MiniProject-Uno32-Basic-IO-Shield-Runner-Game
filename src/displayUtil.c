@@ -4,6 +4,7 @@
 
 #include <stdint.h>
 #include <pic32mx.h>
+#include "displayData.h"
 #include "gameHeader.h"
 
 #define DISPLAY_CHANGE_TO_COMMAND_MODE (PORTFCLR = 0x10)
@@ -65,6 +66,31 @@ void displayHex(int x, int line, int value) {
 	if(x<128 && x>=0 && line >= 0 && line < 4) {
 		int arrayPos = 128*line + x;
 		dataArray[arrayPos] = dataArray[arrayPos] | value;
+	}
+}
+
+
+void displayString(int x, int line, char* string) {
+	const char* i;
+	int j;
+	int k = x;
+	for (i = string; *i!='\0'; i++) {
+		char c = *i;
+		/* Write inside the screen */
+		if(j + k > 128) {
+			continue;
+		}
+		/* Space character */
+		if(c == 32) {
+			k += 4;
+			continue;
+		}
+		/* Display each value of a char */
+		for (j = 0; j<5; j++) {
+			dataArray[j + k + line*128] = charArray[(c - 65)*5 + j];
+		}
+		// next letter and space.
+		k += 7;
 	}
 }
 
