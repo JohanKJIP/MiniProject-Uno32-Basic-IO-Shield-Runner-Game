@@ -137,13 +137,13 @@ void display_init(void) {
     sendSPI(0xA1);
     sendSPI(0xC8);
 
-    sendSPI(0xDA); // some com pins thing?
+    sendSPI(0xDA);
     sendSPI(0x20);
 
-	sendSPI(0x20); // set addressing mode
-	sendSPI(0x0);  // horizontal addressing mode
+	sendSPI(0x20); // Set addressing mode
+	sendSPI(0x0);  // Horizontal addressing mode
 
-    sendSPI(0xAF); // turn on display
+    sendSPI(0xAF); // Turn on display
 	sleep(100);
 	DISPLAY_CHANGE_TO_DATA_MODE;
 }

@@ -39,8 +39,6 @@ void init( void ) {
     IEC(0) |= 0x100;    //enable interrupt flag
     IPC(2) |= 0x1f;     //set priority
     enable_interrupt(); //enable global interrupt
-
-    entity_init();
 }
 
 int GAMESTATE = 1;
@@ -89,15 +87,14 @@ int main(void) {
 	/* SPI2CON bit ON = 1; */
 	SPI2CONSET = 0x8000;
 
-	display_init();
-	display_update();
-
-	init(); /* Do any game-specific initialization */
-
-    int accumulator = 0; // used to control update speed
-	while( 1 ) {
+	display_init(); /* Display setup */
+	init();         /* Chipkit setup */
+    entity_init();  /* Game entity setup */
+    int accumulator = 0; /* Used to control update speed */
+	while(1) {
         accumulator++;
         if(accumulator > (PROCESSOR_SPEED/FPS)) {
+            /* Update game depending on state */
             if(GAMESTATE == 1) {
                 updateMainMenu();
             } else if(GAMESTATE == 2) {
