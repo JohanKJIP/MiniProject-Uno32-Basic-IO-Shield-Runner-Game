@@ -3,58 +3,64 @@
 #include "gameHeader.h"
 
 void mainMenuScreen() {
-    //49 pixels wide
-    // start at x = 40
-
-    /* Top line */
-    int j;
-    for (j = 40; j<40 + 49; j++) {
-        dataArray[j] = 0x80;
+    int startX = 36;
+    int k;
+    for (k = 0; k < 512; k++) {
+        /* Draw line above the word Stranger */
+        if(k >= startX && k<startX+55) dataArray[k] = 0x80;
+        /* Zero the array */
+        else dataArray[k] = 0x0;
     }
+    /* Top line */
     /* Side lines below S and R*/
     int i;
-    for (i = 0; i < 4; i++) {
-        displayPixel(40 + i,20); // left line on things.
-        displayPixel(89 + i,20); // right line on things.
+    for (i = 0; i < 6; i++) {
+        displayPixel(36 + i,19); // left line on things.
+        displayPixel(85 + i,19); // right line on things.
     }
     /* Normal letters */
-    displayString(43,1,"TRANGE");
-    displayString(43,2,"THINGS");
+    displayString(startX + 7,1,"TRANGE");
+    displayString(startX + 7,2,"THINGS");
 
     /* Larger S top */
-    displayHex(40, 1,0x9C);
-    displayHex(41, 1,0xB6);
-    displayHex(42, 1,0x22);
-    displayHex(43, 1,0x22);
-    displayHex(44, 1,0x9C);
-    displayHex(45, 1,0x66);
+    displayHex(startX, 1,0x9C);
+    displayHex(startX + 1, 1,0xB6);
+    displayHex(startX + 2, 1,0x22);
+    displayHex(startX + 3, 1,0x22);
+    displayHex(startX + 4, 1,0x66);
+    displayHex(startX + 5, 1,0xCC);
     /* Larger S bottom */
-    displayHex(40, 1,0x1);
-    displayHex(41, 1,0x2);
-    displayHex(42, 1,0x2);
-    displayHex(43, 1,0x2);
-    displayHex(44, 1,0x3);
-    displayHex(45, 1,0x1);
+    displayHex(startX, 2,0x1);
+    displayHex(startX + 1, 2,0x2);
+    displayHex(startX + 2, 2,0x2);
+    displayHex(startX + 3, 2,0x2);
+    displayHex(startX + 4, 2,0x3);
+    displayHex(startX + 5, 2,0x1);
 
     /* Larger R top */
-    displayHex(84, 1,0xff);
-    displayHex(85, 1,0x22);
-    displayHex(86, 1,0x22);
-    displayHex(87, 1,0x22);
-    displayHex(88, 1,0x62);
-    displayHex(89, 1,0xDC);
+    displayHex(startX + 49, 1,0xFE);
+    displayHex(startX + 49 + 1, 1,0x22);
+    displayHex(startX + 49 + 2, 1,0x22);
+    displayHex(startX + 49 + 3, 1,0x22);
+    displayHex(startX + 49 + 4, 1,0x76);
+    displayHex(startX + 49 + 5, 1,0xDC);
     /* Larger R bottom */
-    displayHex(84, 1,0x3);
-    displayHex(89, 1,0x3);
-    displayHex(90, 1,0x2);
+    displayHex(startX + 49, 2,0x3);
+    displayHex(startX + 49 + 5, 2,0x3);
+    displayHex(startX + 49 + 6, 2,0x2);
 }
 
 /* Code duplication!
 */
 void updateMainMenu() {
     mainMenuScreen();
-
     display_update();
-    if(getbtns() != 0)
+    int buttons = getbtns();
+    /* A button is pressed */
+    if(buttons != 0) {
         GAMESTATE = 2;
+        if(buttons == 1)      DIFFICULTY = 3;      //Right most button
+        else if(buttons == 2) DIFFICULTY = 2; //Middle button
+        else if(buttons == 4) DIFFICULTY = 1; //Left most button
+    }
 }

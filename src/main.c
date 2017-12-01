@@ -42,6 +42,8 @@ void init( void ) {
 }
 
 int GAMESTATE = 1;
+int DIFFICULTY;
+int SCORE = 0;
 
 int main(void) {
     //srand(time(NULL));

@@ -64,18 +64,6 @@ void displayHex(int x, int line, int value) {
 }
 
 /**
-* Set the contrast of the display to a value.
-*/
-void setContrast(int value) {
-	if(value > 0 && value < 256) {
-		DISPLAY_CHANGE_TO_COMMAND_MODE;
-		sendSPI(81);
-		sendSPI(value);
-		DISPLAY_CHANGE_TO_DATA_MODE;
-	}
-}
-
-/**
  * Draw a string on the display.
  */
 void displayString(int x, int line, char* string) {
@@ -97,17 +85,39 @@ void displayString(int x, int line, char* string) {
 		for (j = 0; j<5; j++) {
 			/* Capital letters */
 			if(c >= 65 && c <= 90) {
-				dataArray[j + k + line*128] = charArray[(c - 65)*5 + j];
+				dataArray[j + k + line*128] |= charArray[(c - 65)*5 + j];
 			/* Normal letters */
 			} else if(c >= 97 && c <= 122) {
-				dataArray[j + k + line*128] = charArray[(c - 65 - 32)*5 + j];
-			/* Digits */
-			} else if(c >= 48 && c <= 57) {
-				dataArray[j + k + line*128] = charArray[(c - 48 + 26)*5 + j];
+				dataArray[j + k + line*128] |= charArray[(c - 65 - 32)*5 + j];
+			/* Digits and colon */
+		    } else if(c >= 48 && c <= 58) {
+				dataArray[j + k + line*128] |= charArray[(c - 48 + 26)*5 + j];
 			}
 		}
 		/* Next letter and add space. */
 		k += 7;
+	}
+}
+
+/**
+* Draw an integer on the display.
+*/
+void displayDigit(int x, int line, int value) {
+	int j;
+	if(value == 0) {
+		for (j = 0; j<5; j++) {
+			dataArray[j + x + line*128] |= charArray[26*5 + j];
+		}
+	}
+	int i;
+	while(value != 0) {
+		int num = value % 10;
+		for (i = 0; i<5; i++) {
+			dataArray[i + x + line*128] |= charArray[(num + 26)*5 + i];
+		}
+		/* Next number */
+		value = value / 10;
+		x += 7;
 	}
 }
 
