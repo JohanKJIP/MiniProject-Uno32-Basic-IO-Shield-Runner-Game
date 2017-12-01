@@ -39,13 +39,14 @@ void mainMenuScreen() {
 
     /* Larger R top */
     displayHex(startX + 49, 1,0xFE);
-    displayHex(startX + 49 + 1, 1,0x22);
+    displayHex(startX + 49 + 1, 1,0xFE);
     displayHex(startX + 49 + 2, 1,0x22);
     displayHex(startX + 49 + 3, 1,0x22);
     displayHex(startX + 49 + 4, 1,0x76);
     displayHex(startX + 49 + 5, 1,0xDC);
     /* Larger R bottom */
     displayHex(startX + 49, 2,0x3);
+    displayHex(startX + 49 + 1, 2,0x3);
     displayHex(startX + 49 + 5, 2,0x3);
     displayHex(startX + 49 + 6, 2,0x2);
 }
