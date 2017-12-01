@@ -75,8 +75,8 @@ checkCollisions(){
     for(i = 0; i < 1; i++){
         if(PLAYER_X == obstacles[i].x || PLAYER_X == obstacles[i].x + obstacles[i].hitbox.width) {
             if(player.y > obstacles[i].y - obstacles[i].hitbox.height) {
-                GAMESTATE = 3;
                 obstacles[i].x = 129;
+                GAMESTATE = 3;
             }
         }
     }
@@ -157,7 +157,8 @@ void entities_update() {
     updatePlayer();
     updateObstacles();
     updateBackground();
-    checkCollisions();
     render(obstacles[0].type, obstacles[0].x, obstacles[0].y);
     render(PLAYER,PLAYER_X,player.y);
+    /* Check collisions last! This is where we change state! */
+    checkCollisions();
 }

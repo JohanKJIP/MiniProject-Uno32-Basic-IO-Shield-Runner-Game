@@ -4,6 +4,7 @@
 
 #include <stdint.h>
 #include <pic32mx.h>
+#include "displayData.h"
 #include "gameHeader.h"
 
 #define DISPLAY_CHANGE_TO_COMMAND_MODE (PORTFCLR = 0x10)
@@ -31,7 +32,6 @@ void sleep(int cycles) {
 
 /**
  * Send data to display buffer.
- * @param data
  */
 void sendSPI(uint8_t data) {
 	while(!(SPI2STAT & 0x08));
@@ -40,9 +40,7 @@ void sendSPI(uint8_t data) {
 }
 
 /**
- * Add a pixel to the render buffer.
- * @param int x position.
- * @param int y position.
+ * Add a single pixel to the render buffer at specified position.
  */
 void displayPixel(int x, int y) {
 	if(x<128 && y<32 && !(x < 0) && !(y < 0)) {
@@ -56,15 +54,81 @@ void displayPixel(int x, int y) {
 }
 
 /**
- * Add a hex to the render buffer.
- * @param int x position.
- * @param int line (page on the display ram).
- * @param int value to send.
+ * Add a hex to the render buffer at specified location.
  */
 void displayHex(int x, int line, int value) {
 	if(x<128 && x>=0 && line >= 0 && line < 4) {
 		int arrayPos = 128*line + x;
 		dataArray[arrayPos] = dataArray[arrayPos] | value;
+	}
+}
+
+/**
+ * Draw a string on the display.
+ */
+void displayString(int x, int line, char* string) {
+	const char* i;
+	int j;
+	int k = x;
+	for (i = string; *i!='\0'; i++) {
+		char c = *i;
+		/* Dont draw outside the screen */
+		if(j + k > 128) {
+			continue;
+		}
+		/* Space character */
+		if(c == 32) {
+			k += 4;
+			continue;
+		}
+		/* Display every hex value of a char */
+		for (j = 0; j<5; j++) {
+			/* Capital letters */
+			if(c >= 65 && c <= 90) {
+				dataArray[j + k + line*128] |= charArray[(c - 65)*5 + j];
+			/* Normal letters */
+			} else if(c >= 97 && c <= 122) {
+				dataArray[j + k + line*128] |= charArray[(c - 65 - 32)*5 + j];
+			/* Digits and colon */
+		    } else if(c >= 48 && c <= 58) {
+				dataArray[j + k + line*128] |= charArray[(c - 48 + 26)*5 + j];
+			}
+		}
+		/* Next letter and add space. */
+		k += 7;
+	}
+}
+
+/**
+* Draw an integer on the display.
+*/
+void displayDigit(int x, int line, int value) {
+	int j;
+	if(value == 0) {
+		for (j = 0; j<5; j++) {
+			dataArray[j + x + line*128] |= charArray[26*5 + j];
+		}
+	}
+	int i;
+	while(value != 0) {
+		int num = value % 10;
+		for (i = 0; i<5; i++) {
+			dataArray[i + x + line*128] |= charArray[(num + 26)*5 + i];
+		}
+		/* Next number */
+		value = value / 10;
+		x += 7;
+	}
+}
+
+/**
+ * Update the display.
+ */
+void display_update(void) {
+	// send render buffer to screen
+	int i;
+	for(i=0; i<DATA_ARRAY_SIZE; i++) {
+		sendSPI(dataArray[i]);
 	}
 }
 
@@ -95,24 +159,13 @@ void display_init(void) {
     sendSPI(0xA1);
     sendSPI(0xC8);
 
-    sendSPI(0xDA); // some com pins thing?
+    sendSPI(0xDA);
     sendSPI(0x20);
 
-	sendSPI(0x20); // set addressing mode
-	sendSPI(0x0);  // horizontal addressing mode
+	sendSPI(0x20); // Set addressing mode
+	sendSPI(0x0);  // Horizontal addressing mode
 
-    sendSPI(0xAF); // turn on display
+    sendSPI(0xAF); // Turn on display
 	sleep(100);
 	DISPLAY_CHANGE_TO_DATA_MODE;
-}
-
-/**
- * Update the display.
- */
-void display_update(void) {
-	// send render buffer to screen
-	int i;
-	for(i=0; i<DATA_ARRAY_SIZE; i++) {
-		sendSPI(dataArray[i]);
-	}
 }
