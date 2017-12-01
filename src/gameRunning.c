@@ -50,14 +50,16 @@ int getRandomInt(int switchAmount){
  * set memory with a val
 */
 void gameScreen(int val, int size) {
-	int i;
-	for (i = 0; i<size; i++) {
-		if(i>=384) {
-			dataArray[i] = 0x80;
-		} else {
-			dataArray[i] = 0;
-		}
-	}
+    unsigned char hex[16] = {0x1, 0x2, 0x4, 0x8, 0x10, 0x20, 0x40, 0x80};
+    int upsideDownIndex = ((31 - upsideDownValue)/8) + 1;
+    int i;
+    for (i = 0; i < size; i++) {
+        if(i >= ((upsideDownIndex * 128) - 128) && i < (upsideDownIndex * 128)){
+            dataArray[i] = hex[((31 - upsideDownValue) % 8)];
+        } else{
+            dataArray[i] = 0;
+        }
+    }
 }
 
 /**

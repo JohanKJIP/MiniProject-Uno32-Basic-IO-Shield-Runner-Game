@@ -24,3 +24,5 @@ int getRandomInt(int);
 
 /* Functions from entityHandler */
 void entities_update(void);
+extern int upsideDown;
+extern int upsideDownValue;
