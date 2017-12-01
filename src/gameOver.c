@@ -22,7 +22,7 @@ void gameOverScreen(int val, int size) {
 	/* Display strings */
 	displayString(32, 1, "Game Over");
 	displayString(36, 2, "Score: ");
-	displayDigit(36 + 42, 2, SCORE);
+	displayDigit(36 + 42, 2, 123);
 }
 
 /*

@@ -109,15 +109,26 @@ void displayDigit(int x, int line, int value) {
 			dataArray[j + x + line*128] |= charArray[26*5 + j];
 		}
 	}
-	int i;
+	int index = 0;
+	int numbers = sizeof(value)-1;
+	int numberArr[numbers]; //max 10 numbers
 	while(value != 0) {
 		int num = value % 10;
-		for (i = 0; i<5; i++) {
-			dataArray[i + x + line*128] |= charArray[(num + 26)*5 + i];
-		}
+		numberArr[index] = num;
 		/* Next number */
 		value = value / 10;
-		x += 7;
+		index++;
+	}
+	int k;
+	int i;
+	/* Draw each number in number array reversed. */
+	for (k=numbers-1; k>=0; k--) {
+		if(numberArr[k] >= 0 && numberArr[k] < 10) {
+			for (i = 0; i<5; i++) {
+				dataArray[i + x + line*128] |= charArray[(numberArr[k] + 26)*5 + i];
+			}
+			x += 7;
+		}
 	}
 }
 
