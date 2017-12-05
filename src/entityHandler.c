@@ -12,13 +12,18 @@ Obstacle obstacles[MAX_OBSTACLE_AMOUNT];         //obstacle array
 int obstacleAmount = 0;
 
 /* jump variables */
-int jumpDelta = 60;                 //should be incremented by timer later on
+int jumpDelta = 60;                 //should be incremented by dimCounter later on
 
 /* counters */
 int legCounter = 0;
 int backgroundCounter = 0;
 int particleX = 128;
 int cloudX = 0;
+
+/* upside down variables */
+int upsideDown = 0;
+int upsideDownValue = 0;
+int dimCounter = 50;
 
 /* add obstacle to array */
 void add_obstacle(){
@@ -76,6 +81,9 @@ checkCollisions(){
         if(PLAYER_X == obstacles[i].x || PLAYER_X == obstacles[i].x + obstacles[i].hitbox.width) {
             if(player.y > obstacles[i].y - obstacles[i].hitbox.height) {
                 obstacles[i].x = 129;
+                upsideDown = 0;
+                upsideDownValue = 0;
+                dimCounter = 50;
                 GAMESTATE = 3;
             }
         }
@@ -129,34 +137,87 @@ void updateObstacles() {
     obstacles[0].x -= 1;
 }
 
+/* update background animations */
 void updateBackground(){
-    renderCloud(128 - cloudX);
-    renderCloud(150 - cloudX);
-    renderCloud(200 - cloudX);
     backgroundCounter++;
     if(backgroundCounter > 129){
         backgroundCounter = 0;
     }
-    renderParticle(particleX - 100, 10);
-    renderParticle(particleX - 20, 3);
-    renderParticle(particleX - 120, 16);
 
-    if(backgroundCounter % 2){
-        particleX--;
+    if(!upsideDown){
+        renderCloud(128 - cloudX, 0);
+        renderCloud(150 - cloudX, 2);
+        renderCloud(200 - cloudX, 1);
     }
-    if(backgroundCounter % 4 == 0) {
-        cloudX++;
+
+    if(upsideDown){
+        renderParticle(particleX, 11);
+        renderParticle(particleX - 20, 27);
+        renderParticle(particleX - 40, 15);
+        renderParticle(particleX - 70, 30);
+        renderParticle(particleX - 90, 22);
+        renderParticle(particleX - 100, 19);
+        renderParticle(particleX - 110, 25);
+        renderParticle(particleX - 120, 12);
     }
-    if(particleX == 0)
-        particleX = 128;
-    if(cloudX > 200 + 6) //128 + cloud width
-        cloudX = 0;
+
+    if(upsideDown) renderWeb();
+
+    if(backgroundCounter % 2) particleX--;
+
+    if(backgroundCounter % 4 == 0) cloudX++;
+
+    if(particleX == 0) particleX = 128;
+
+    if(cloudX > 200 + 6) cloudX = 0; //128 + cloud width
+}
+
+/* change ground dimension */
+void changeDimension(){
+    dimCounter++;
+    if(!upsideDown){
+        if(dimCounter <= 20){
+            upsideDownValue++;
+        } else if(dimCounter <= 32) {
+            if((dimCounter - 20) % 2) upsideDownValue ++;
+        } else if(dimCounter <= 40){
+            if((dimCounter - 32) % 3 == 2) upsideDownValue ++;
+        } else if(dimCounter <= 49){
+            if((dimCounter - 40) % 4 == 3) upsideDownValue ++;
+        } else{
+            upsideDownValue = 31;
+            upsideDown = 1;
+        }
+    } else {
+        if(dimCounter <= 20){
+            upsideDownValue--;
+        } else if(dimCounter <= 32) {
+            if((dimCounter - 20) % 2) upsideDownValue --;
+        } else if(dimCounter <= 40){
+            if((dimCounter - 32) % 3 == 2) upsideDownValue --;
+        } else if(dimCounter <= 49){
+            if((dimCounter - 40) % 4 == 3) upsideDownValue --;
+        } else{
+            upsideDownValue = 0;
+            upsideDown = 0;
+        }
+    }
 }
 
 void entities_update() {
     updatePlayer();
     updateObstacles();
     updateBackground();
+    checkCollisions();
+
+    if(dimCounter > 49 && getbtns() == 2){
+        dimCounter = 0;
+        changeDimension();
+    }
+    if(dimCounter <= 49){
+        changeDimension();
+    }
+
     render(obstacles[0].type, obstacles[0].x, obstacles[0].y);
     render(PLAYER,PLAYER_X,player.y);
     /* Check collisions last! This is where we change state! */

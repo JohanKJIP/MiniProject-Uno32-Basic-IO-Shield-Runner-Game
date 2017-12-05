@@ -102,14 +102,47 @@ void renderStone(int x, int y){
 }
 
 /* render cloud */
-void renderCloud(int x){
-    displayHex(x, 0, 0x4);
-    displayHex(x+1, 0, 0x4);
-    displayHex(x+2, 0, 0x6);
-    displayHex(x+3, 0, 0x7);
-    displayHex(x+4, 0, 0x6);
-    displayHex(x+5, 0, 0x6);
-    displayHex(x+6, 0, 0x4);
+void renderCloud(int x, int y){
+    displayHex(x, y, 0x4);
+    displayHex(x+1, y, 0x4);
+    displayHex(x+2, y, 0x6);
+    displayHex(x+3, y, 0x7);
+    displayHex(x+4, y, 0x6);
+    displayHex(x+5, y, 0x6);
+    displayHex(x+6, y, 0x4);
+}
+
+/* render corner webs */
+void renderWeb(){
+    displayHex(0, 3, 0x91);
+    displayHex(1, 3, 0x88);
+    displayHex(2, 3, 0x22);
+    displayHex(3, 3, 0x94);
+    displayHex(4, 3, 0x10);
+    displayHex(5, 3, 0x28);
+    displayHex(6, 3, 0x40);
+    displayHex(7, 3, 0x28);
+    displayHex(7, 3, 0x28);
+    displayHex(8, 3, 0x80);
+    displayHex(9, 3, 0x40);
+    displayHex(10, 3, 0x80);
+    displayHex(12, 3, 0x80);
+    displayHex(17, 3, 0x80);
+    displayHex(22, 3, 0x80);
+
+    displayHex(127, 3, 0x5);
+    displayHex(126, 3, 0x42);
+    displayHex(125, 3, 0x88);
+    displayHex(124, 3, 0x4);
+    displayHex(123, 3, 0x40);
+    displayHex(122, 3, 0x90);
+    displayHex(121, 3, 0x40);
+    displayHex(120, 3, 0xa0);
+    displayHex(118, 3, 0x40);
+    displayHex(117, 3, 0x80);
+    displayHex(111, 3, 0x80);
+    displayHex(107, 3, 0x80);
+    displayHex(101, 3, 0x80);
 }
 
 /* render pixel */
