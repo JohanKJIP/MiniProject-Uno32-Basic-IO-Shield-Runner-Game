@@ -68,5 +68,6 @@ void gameScreen(int val, int size) {
 void updateRunning() {
     gameScreen(0,512);
     entities_update();
+    sleep(20);
     display_update();
 }
