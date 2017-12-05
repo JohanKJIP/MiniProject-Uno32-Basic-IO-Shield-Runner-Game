@@ -3,7 +3,8 @@
 #include "gameHeader.h"
 
 #define PLAYER_X 10
-#define FLOOR_Y 29
+#define FLOOR_Y_UP 29
+#define FLOOR_Y_DOWN 8
 Player player;                      //player entity
 
 /* obstacle variable */
@@ -28,20 +29,20 @@ int dimCounter = 50;
 /* add obstacle to array */
 void add_obstacle(){
     if(obstacleAmount < MAX_OBSTACLE_AMOUNT){
-        Obstacle obstacle = { .type = STONE, .x = 129, .y = FLOOR_Y, .hitbox = { .width = 3, .height = 3} }; //TODO randomize size
+        Obstacle obstacle = { .type = STONE, .x = 129, .y = FLOOR_Y_UP, .hitbox = { .width = 3, .height = 3} }; //TODO randomize size
         obstacles[0] = obstacle;
     }
 }
 
 void entity_init() {
     player.type = PLAYER;
-    player.y = FLOOR_Y; //floor level
+    player.y = FLOOR_Y_UP; //floor level
     player.playerScore = 0;
     player.jumping = 0;
     player.crouching = 0;
     player.legDown = 0;
-    player.hitbox.width = 10;       //preliminary width
-    player.hitbox.height = 25;      //preliminary height
+    player.hitbox.width = 4;       //preliminary width
+    player.hitbox.height = 6;      //preliminary height
 
     add_obstacle();
 }
@@ -92,18 +93,21 @@ checkCollisions(){
 
 /* jumping function */
 void playerJump() {
-    if(jumpDelta >= 60 && getbtns() == 4) {
+    if(jumpDelta >= 27 && getbtns() == 4) {
         jumpDelta = 0;
         player.jumping = 1;
-    } else if(jumpDelta >= 60 && getbtns() == 2) {
-        player.crouching = 1;
-        player.hitbox.height = 3;
-    } else if(jumpDelta < 60 && player.y < (FLOOR_Y + 1)) {
-        player.y += (0.2) * (jumpDelta/4 * (jumpDelta/4 - 4));
+    } else if(jumpDelta < 27 && player.y <= FLOOR_Y_UP && !upsideDown) {
         jumpDelta++;
-    } else{
-        player.y = FLOOR_Y;
-        jumpDelta = 60;
+        player.y = (((jumpDelta - 27) * jumpDelta*jumpDelta) / 240) + 29;
+        if(jumpDelta == 20 && dimCounter == 50) dimCounter = 0;
+    } else if(jumpDelta < 27 && player.y >= FLOOR_Y_DOWN && upsideDown){
+        jumpDelta++;
+        player.y = -(((jumpDelta - 27) * jumpDelta*jumpDelta) / 240) + 8;
+        if(jumpDelta == 20 && dimCounter == 50) dimCounter = 0;
+    }else{
+        if(!upsideDown) player.y = FLOOR_Y_UP;
+        else player.y = FLOOR_Y_DOWN;
+        jumpDelta = 27;
         player.jumping = 0;
     }
     if(getbtns() != 2) {
@@ -174,32 +178,34 @@ void updateBackground(){
 
 /* change ground dimension */
 void changeDimension(){
-    dimCounter++;
-    if(!upsideDown){
-        if(dimCounter <= 20){
-            upsideDownValue++;
-        } else if(dimCounter <= 32) {
-            if((dimCounter - 20) % 2) upsideDownValue ++;
-        } else if(dimCounter <= 40){
-            if((dimCounter - 32) % 3 == 2) upsideDownValue ++;
-        } else if(dimCounter <= 49){
-            if((dimCounter - 40) % 4 == 3) upsideDownValue ++;
-        } else{
-            upsideDownValue = 31;
-            upsideDown = 1;
-        }
-    } else {
-        if(dimCounter <= 20){
-            upsideDownValue--;
-        } else if(dimCounter <= 32) {
-            if((dimCounter - 20) % 2) upsideDownValue --;
-        } else if(dimCounter <= 40){
-            if((dimCounter - 32) % 3 == 2) upsideDownValue --;
-        } else if(dimCounter <= 49){
-            if((dimCounter - 40) % 4 == 3) upsideDownValue --;
-        } else{
-            upsideDownValue = 0;
-            upsideDown = 0;
+    if(dimCounter <= 49){
+        dimCounter++;
+        if(!upsideDown){
+            if(dimCounter <= 20){
+                upsideDownValue++;
+            } else if(dimCounter <= 32) {
+                if((dimCounter - 20) % 2) upsideDownValue ++;
+            } else if(dimCounter <= 40){
+                if((dimCounter - 32) % 3 == 2) upsideDownValue ++;
+            } else if(dimCounter <= 49){
+                if((dimCounter - 40) % 4 == 3) upsideDownValue ++;
+            } else{
+                upsideDownValue = 31;
+                upsideDown = 1;
+            }
+        } else {
+            if(dimCounter <= 20){
+                upsideDownValue--;
+            } else if(dimCounter <= 32) {
+                if((dimCounter - 20) % 2) upsideDownValue --;
+            } else if(dimCounter <= 40){
+                if((dimCounter - 32) % 3 == 2) upsideDownValue --;
+            } else if(dimCounter <= 49){
+                if((dimCounter - 40) % 4 == 3) upsideDownValue --;
+            } else{
+                upsideDownValue = 0;
+                upsideDown = 0;
+            }
         }
     }
 }
@@ -209,14 +215,7 @@ void entities_update() {
     updateObstacles();
     updateBackground();
     checkCollisions();
-
-    if(dimCounter > 49 && getbtns() == 2){
-        dimCounter = 0;
-        changeDimension();
-    }
-    if(dimCounter <= 49){
-        changeDimension();
-    }
+    changeDimension();
 
     render(obstacles[0].type, obstacles[0].x, obstacles[0].y);
     render(PLAYER,PLAYER_X,player.y);
