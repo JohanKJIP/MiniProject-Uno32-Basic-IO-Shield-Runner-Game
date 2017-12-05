@@ -103,6 +103,8 @@ int main(void) {
                 updateRunning();
             } else if(GAMESTATE == 3) {
                 updateGameOver();
+            } else if(GAMESTATE == 4) {
+                updateLeaderBoard();
             }
             accumulator = 0;
         }

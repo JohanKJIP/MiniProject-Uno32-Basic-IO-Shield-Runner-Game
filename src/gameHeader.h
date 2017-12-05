@@ -16,9 +16,10 @@ int getsw(void);
 void enable_interrupt(void);
 
 /* Functions from Main.c */
-void updateRunning();
-void updateMainMenu();
-void updateGameOver();
+void updateRunning(void);
+void updateMainMenu(void);
+void updateGameOver(void);
+void updateLeaderBoard(void);
 extern int GAMESTATE;
 extern int DIFFICULTY;
 extern int SCORE;
