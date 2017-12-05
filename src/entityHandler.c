@@ -12,7 +12,7 @@ Obstacle obstacles[MAX_OBSTACLE_AMOUNT];         //obstacle array
 int obstacleAmount = 0;
 
 /* jump variables */
-int jumpDelta = 60;                 //should be incremented by timer later on
+int jumpDelta = 60;                 //should be incremented by dimCounter later on
 
 /* counters */
 int legCounter = 0;
@@ -23,7 +23,7 @@ int cloudX = 0;
 /* upside down variables */
 int upsideDown = 0;
 int upsideDownValue = 0;
-int timer = 0;
+int dimCounter = 50;
 
 /* add obstacle to array */
 void add_obstacle(){
@@ -82,6 +82,9 @@ checkCollisions(){
             if(player.y > obstacles[i].y - obstacles[i].hitbox.height) {
                 GAMESTATE = 3;
                 obstacles[i].x = 129;
+                upsideDown = 0;
+                upsideDownValue = 0;
+                dimCounter = 50;
             }
         }
     }
@@ -171,31 +174,32 @@ void updateBackground(){
 
 /* change ground dimension */
 void changeDimension(){
+    dimCounter++;
     if(!upsideDown){
-        if(timer <= 20){
+        if(dimCounter <= 20){
             upsideDownValue++;
-        } else if(timer <= 32) {
-            if((timer - 20) % 2) upsideDownValue ++;
-        } else if(timer <= 40){
-            if((timer - 32) % 3 == 2) upsideDownValue ++;
-        } else if(timer <= 49){
-            if((timer - 40) % 4 == 3) upsideDownValue ++;
+        } else if(dimCounter <= 32) {
+            if((dimCounter - 20) % 2) upsideDownValue ++;
+        } else if(dimCounter <= 40){
+            if((dimCounter - 32) % 3 == 2) upsideDownValue ++;
+        } else if(dimCounter <= 49){
+            if((dimCounter - 40) % 4 == 3) upsideDownValue ++;
         } else{
-             timer = 0;
-             upsideDown = 1;
+            upsideDownValue = 31;
+            upsideDown = 1;
         }
     } else {
-        if(timer <= 20){
+        if(dimCounter <= 20){
             upsideDownValue--;
-        } else if(timer <= 32) {
-            if((timer - 20) % 2) upsideDownValue --;
-        } else if(timer <= 40){
-            if((timer - 32) % 3 == 2) upsideDownValue --;
-        } else if(timer <= 49){
-            if((timer - 40) % 4 == 3) upsideDownValue --;
+        } else if(dimCounter <= 32) {
+            if((dimCounter - 20) % 2) upsideDownValue --;
+        } else if(dimCounter <= 40){
+            if((dimCounter - 32) % 3 == 2) upsideDownValue --;
+        } else if(dimCounter <= 49){
+            if((dimCounter - 40) % 4 == 3) upsideDownValue --;
         } else{
-             timer = 0;
-             upsideDown = 0;
+            upsideDownValue = 0;
+            upsideDown = 0;
         }
     }
 }
@@ -206,8 +210,13 @@ void entities_update() {
     updateBackground();
     checkCollisions();
 
-    timer++;
-    if(!upsideDown) changeDimension();
+    if(dimCounter > 49 && getbtns() == 2){
+        dimCounter = 0;
+        changeDimension();
+    }
+    if(dimCounter <= 49){
+        changeDimension();
+    }
 
     render(obstacles[0].type, obstacles[0].x, obstacles[0].y);
     render(PLAYER,PLAYER_X,player.y);
