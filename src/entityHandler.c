@@ -79,7 +79,7 @@ void render(EntityType_t type, int x, int y) {
 checkCollisions(){
     int i;
     for(i = 0; i < 1; i++){
-        if(PLAYER_X == obstacles[i].x || PLAYER_X == obstacles[i].x + obstacles[i].hitbox.width) {
+        if(PLAYER_X == (int)obstacles[i].x || PLAYER_X == (int)obstacles[i].x + obstacles[i].hitbox.width) {
             if(player.y > obstacles[i].y - obstacles[i].hitbox.height) {
                 obstacles[i].x = 129;
                 upsideDown = 0;
@@ -165,9 +165,8 @@ void updateBackground(){
         renderParticle(particleX - 100, 19);
         renderParticle(particleX - 110, 25);
         renderParticle(particleX - 120, 12);
+        renderWeb();
     }
-
-    if(upsideDown) renderWeb();
 
     if(backgroundCounter % 2) particleX--;
 

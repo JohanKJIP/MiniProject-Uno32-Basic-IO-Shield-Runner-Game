@@ -37,4 +37,5 @@ void updateGameOver() {
     sleep(10000000);
 	/* Go to menu */
 	GAMESTATE = 1;
+	SCORE = 0;
 }
