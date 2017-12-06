@@ -13,9 +13,6 @@
 //#include <time.h>   /*TODO */
 #include <stdlib.h> /*TODO */
 
-#define FPS 60
-#define PROCESSOR_SPEED 3200000
-
 volatile int* ledp;
 /* Init basic functions */
 void init( void ) {
@@ -94,19 +91,14 @@ int main(void) {
     entity_init();  /* Game entity setup */
     int accumulator = 0; /* Used to control update speed */
 	while(1) {
-        accumulator++;
-        if(accumulator > (PROCESSOR_SPEED/FPS)) {
-            /* Update game depending on state */
-            if(GAMESTATE == 1) {
-                updateMainMenu();
-            } else if(GAMESTATE == 2) {
-                updateRunning();
-            } else if(GAMESTATE == 3) {
-                updateGameOver();
-            } else if(GAMESTATE == 4) {
-                //updateLeaderBoard();
-            }
-            accumulator = 0;
+        if(GAMESTATE == 1) {
+            updateMainMenu();
+        } else if(GAMESTATE == 2) {
+            updateRunning();
+        } else if(GAMESTATE == 3) {
+            updateGameOver();
+        } else if(GAMESTATE == 4) {
+            //updateLeaderBoard();
         }
 	}
 	return 0;
