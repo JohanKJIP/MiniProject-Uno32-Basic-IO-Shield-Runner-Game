@@ -11,7 +11,6 @@ int obstacleAmount = 0;
 
 /* counters */
 int timeCounter = 0;
-int backgroundCounter = 0;
 int particleX = 128;
 int cloudX = 0;
 
@@ -123,7 +122,6 @@ void updatePlayer() {
         player.legDown = 1;
     } else if(timeCounter == 10){
         player.legDown = 0;
-        timeCounter = 0;
     }
 }
 
@@ -141,11 +139,6 @@ void updateObstacles() {
 
 /* update background animations */
 void updateBackground(){
-    backgroundCounter++;
-    if(backgroundCounter > 129){
-        backgroundCounter = 0;
-    }
-
     if(!upsideDown){
         renderCloud(128 - cloudX, 0);
         renderCloud(150 - cloudX, 2);
@@ -164,13 +157,13 @@ void updateBackground(){
         renderWeb();
     }
 
-    if(backgroundCounter % 2) particleX--;
+    if(timeCounter % 2) particleX--;
 
-    if(backgroundCounter % 4 == 0) cloudX++;
+    if(timeCounter % 4 == 0) cloudX++;
 
     if(particleX == 0) particleX = 128;
 
-    if(cloudX > 200 + 6) cloudX = 0; //128 + cloud width
+    if(cloudX == 206) cloudX = 0;
 }
 
 /* change ground dimension */
@@ -209,6 +202,8 @@ void changeDimension(){
 
 void entities_update() {
     timeCounter++;
+    if(timeCounter > 130) timeCounter = 0;
+
     updatePlayer();
     updateObstacles();
     updateBackground();
