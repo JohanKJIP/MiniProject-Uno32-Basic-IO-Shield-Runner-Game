@@ -129,19 +129,19 @@ void updatePlayer() {
 }
 
 void updateObstacles() {
-    //TODO
-    //update obstacle array
-    //render obstacles
-    //spawn new ones?
     if(obstacles[0].x < -2){
         SCORE++;
         obstacles[0].x = 128;
     }
     obstacles[0].x -= 0.7 + 0.05*SCORE;
+    if(upsideDown) {
+        obstacles[0].y = FLOOR_Y_DOWN;
+    } else {
+        obstacles[0].y = FLOOR_Y_UP;
+    }
 }
 
-/* update background animations */
-void updateBackground(){
+void renderBackground() {
     if(!upsideDown){
         renderCloud(128 - cloudX, 0);
         renderCloud(150 - cloudX, 2);
@@ -159,7 +159,10 @@ void updateBackground(){
         renderParticle(particleX - 120, 12);
         renderWeb();
     }
+}
 
+/* update background animations */
+void updateBackground(){
     if(timeCounter % 2) particleX--;
 
     if(timeCounter % 4 == 0) cloudX++;
@@ -203,17 +206,19 @@ void changeDimension(){
     }
 }
 
+void entities_render() {
+    render(obstacles[0].type, obstacles[0].x, obstacles[0].y);
+    render(PLAYER,PLAYER_X,player.y);
+    renderBackground();
+}
+
 void entities_update() {
     if(timeCounter > 130) timeCounter = 0;
-
     updatePlayer();
     updateObstacles();
     updateBackground();
     checkCollisions();
     changeDimension();
-
-    render(obstacles[0].type, obstacles[0].x, obstacles[0].y);
-    render(PLAYER,PLAYER_X,player.y);
     /* Check collisions last! This is where we change state! */
     checkCollisions();
 }
