@@ -1,4 +1,5 @@
 /*  Header file for game functions */
+#include <stdint.h>
 
 /* Display-related functions from displayUtil.c */
 void displayPixel(int, int);
@@ -31,3 +32,5 @@ int getRandomInt(int);
 void entities_update(void);
 extern int upsideDown;
 extern int upsideDownValue;
+#define FLOOR_Y_UP 29
+#define FLOOR_Y_DOWN 8

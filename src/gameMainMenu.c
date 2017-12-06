@@ -1,6 +1,7 @@
 #include <stdint.h>
 #include <pic32mx.h>
 #include "gameHeader.h"
+#include "entities.h"
 
 void mainMenuScreen() {
     int startX = 36;
@@ -51,6 +52,34 @@ void mainMenuScreen() {
     displayHex(startX + 49 + 6, 2,0x2);
 }
 
+void animation() {
+    player.type = PLAYER;
+    player.x = -2;
+    player.y = FLOOR_Y_UP;
+    player.playerScore = 0;
+    player.jumping = 0;
+    player.crouching = 0;
+    player.legDown = 0;
+    player.hitbox.width = 4;
+    player.hitbox.height = 6;
+
+    int counter = 0;
+    Monster monster;
+    monster.x = -30;
+    while (counter < 1500) {
+        if(counter % 10 == 0) {
+            player.x += 1;
+            monster.x += 1;
+        }
+        mainMenuScreen();
+        updatePlayer();
+        render(player.type,player.x,player.y);
+        render(PLAYER,monster.x,FLOOR_Y_UP);
+        display_update();
+        counter++;
+    }
+}
+
 /* Code duplication!
 */
 void updateMainMenu() {
@@ -59,6 +88,7 @@ void updateMainMenu() {
     int buttons = getbtns();
     /* A button is pressed */
     if(buttons != 0) {
+        animation();
         GAMESTATE = 2;
         if(buttons == 1)      DIFFICULTY = 3; //Right most button
         else if(buttons == 2) DIFFICULTY = 2; //Middle button

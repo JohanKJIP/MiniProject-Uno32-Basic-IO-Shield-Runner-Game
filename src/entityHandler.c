@@ -2,10 +2,7 @@
 #include "entities.h"
 #include "gameHeader.h"
 
-#define PLAYER_X 10
-#define FLOOR_Y_UP 29
-#define FLOOR_Y_DOWN 8
-Player player;                      //player entity
+#define PLAYER_X 10                    //player entity
 
 /* obstacle variable */
 #define MAX_OBSTACLE_AMOUNT 10
@@ -76,7 +73,7 @@ void render(EntityType_t type, int x, int y) {
 
 /* check for collision between
    player and obstacles */
-checkCollisions(){
+void checkCollisions(){
     int i;
     for(i = 0; i < 1; i++){
         if(PLAYER_X == (int)obstacles[i].x || PLAYER_X == (int)obstacles[i].x + obstacles[i].hitbox.width) {
@@ -100,7 +97,7 @@ void playerJump() {
         jumpDelta++;
         if(player.y <= FLOOR_Y_UP && !upsideDown) player.y = (((jumpDelta - 27) * jumpDelta*jumpDelta) / 240) + 29;
         else player.y = -(((jumpDelta - 27) * jumpDelta*jumpDelta) / 240) + 8;
-        if(jumpDelta == 20 && dimCounter == 50 && timeCounter % 10 == 1) dimCounter = 0;
+        if(jumpDelta == 20 && dimCounter == 50 && timeCounter % 7 == 1) dimCounter = 0;
     } else if(jumpDelta > 20 && dimCounter < 50){
         jumpDelta++;
         if(!upsideDown) player.y = -(0.015) * (jumpDelta - 20) * (jumpDelta - 52) + 23;
