@@ -16,6 +16,7 @@ void renderLegDown(int x, int y, int upsideDown){
         displayPixel(x+2,y-4);
         displayPixel(x+3,y-1);
         displayPixel(x+3,y-2);
+
     } else {
         displayPixel(x,y-1);
         displayPixel(x,y-2);
@@ -47,6 +48,7 @@ void renderLegUp(int x, int y, int upsideDown){
         displayPixel(x+2,y-1);
         displayPixel(x+2,y-2);
         displayPixel(x+2,y-4);
+
     } else{
         displayPixel(x,y-1);
         displayPixel(x,y-2);
@@ -135,6 +137,33 @@ void renderCloud(int x, int y){
     displayHex(x+4, y, 0x6);
     displayHex(x+5, y, 0x6);
     displayHex(x+6, y, 0x4);
+}
+
+/* render monster animation */
+void renderMonster(int x, int y, int legDown){
+    if(legDown){
+        displayHex(x, 3, 0xc0);
+        displayHex(x+1, 3, 0x40);
+        displayHex(x+2, 3, 0x7e);
+        displayHex(x+3, 3, 0x26);
+        displayHex(x+4, 3, 0xc9);
+        displayHex(x+5, 3, 0x9);
+        displayHex(x+6, 3, 0x2);
+        displayPixel(x+4, y-6);
+        displayPixel(x+5, y-6);
+        displayPixel(x+6, y-7);
+    } else{
+        displayHex(x, 3, 0x80);
+        displayHex(x+1, 3, 0x80);
+        displayHex(x+2, 3, 0xfe);
+        displayHex(x+3, 3, 0x7e);
+        displayHex(x+4, 3, 0x69);
+        displayHex(x+5, 3, 0x49);
+        displayHex(x+6, 3, 0x1);
+        displayPixel(x+4, y-6);
+        displayPixel(x+5, y-6);
+        displayPixel(x+6, y-7);
+    }
 }
 
 /* render corner webs */

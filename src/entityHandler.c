@@ -135,7 +135,7 @@ void updateObstacles() {
     }
     obstacles[0].x -= 0.7 + 0.05*SCORE;
     if(upsideDown) {
-        obstacles[0].y = FLOOR_Y_DOWN;
+        obstacles[0].y = FLOOR_Y_DOWN - 4;
     } else {
         obstacles[0].y = FLOOR_Y_UP;
     }

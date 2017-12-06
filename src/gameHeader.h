@@ -31,6 +31,7 @@ int getRandomInt(int);
 /* Functions from entityHandler */
 void entities_update(void);
 void entities_render(void);
+extern int timeCounter;
 extern int upsideDown;
 extern int upsideDownValue;
 #define FLOOR_Y_UP 29
