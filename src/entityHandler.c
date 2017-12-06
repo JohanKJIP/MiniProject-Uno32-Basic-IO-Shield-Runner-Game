@@ -12,14 +12,14 @@ Player player;                      //player entity
 Obstacle obstacles[MAX_OBSTACLE_AMOUNT];         //obstacle array
 int obstacleAmount = 0;
 
-/* jump variables */
-int jumpDelta = 60;                 //should be incremented by dimCounter later on
-
 /* counters */
-int legCounter = 0;
+int timeCounter = 0;
 int backgroundCounter = 0;
 int particleX = 128;
 int cloudX = 0;
+
+/* jump variables */
+int jumpDelta = 60;
 
 /* upside down variables */
 int upsideDown = 0;
@@ -100,7 +100,7 @@ void playerJump() {
         jumpDelta++;
         if(player.y <= FLOOR_Y_UP && !upsideDown) player.y = (((jumpDelta - 27) * jumpDelta*jumpDelta) / 240) + 29;
         else player.y = -(((jumpDelta - 27) * jumpDelta*jumpDelta) / 240) + 8;
-        if(jumpDelta == 20 && dimCounter == 50) dimCounter = 0;
+        if(jumpDelta == 20 && dimCounter == 50 && timeCounter % 10 == 1) dimCounter = 0;
     } else if(jumpDelta > 20 && dimCounter < 50){
         jumpDelta++;
         if(!upsideDown) player.y = -(0.015) * (jumpDelta - 20) * (jumpDelta - 52) + 23;
@@ -122,12 +122,11 @@ void updatePlayer() {
     //check collissions etc.etc.
     playerJump();
 
-    legCounter++;
-    if(legCounter == 5){
+    if(timeCounter == 5){
         player.legDown = 1;
-    } else if(legCounter == 10){
+    } else if(timeCounter == 10){
         player.legDown = 0;
-        legCounter = 0;
+        timeCounter = 0;
     }
 }
 
@@ -212,6 +211,7 @@ void changeDimension(){
 }
 
 void entities_update() {
+    timeCounter++;
     updatePlayer();
     updateObstacles();
     updateBackground();
