@@ -70,9 +70,9 @@ void animation() {
         if(counter % 10 == 0) {
             player.x += 1;
             monster.x += 1;
+            updatePlayer();
         }
         mainMenuScreen();
-        updatePlayer();
         render(player.type,player.x,player.y);
         render(PLAYER,monster.x,FLOOR_Y_UP);
         display_update();

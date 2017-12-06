@@ -22,6 +22,8 @@ int upsideDown = 0;
 int upsideDownValue = 0;
 int dimCounter = 50;
 
+Player player;
+
 /* add obstacle to array */
 void add_obstacle(){
     if(obstacleAmount < MAX_OBSTACLE_AMOUNT){
@@ -96,7 +98,7 @@ void playerJump() {
         jumpDelta++;
         if(player.y <= FLOOR_Y_UP && !upsideDown) player.y = (((jumpDelta - 27) * jumpDelta*jumpDelta) / 240) + 29;
         else player.y = -(((jumpDelta - 27) * jumpDelta*jumpDelta) / 240) + 8;
-        if(jumpDelta == 20 && dimCounter == 50 && timeCounter % 7 == 1) dimCounter = 0;
+        if(jumpDelta == 20 && dimCounter == 50 && timeCounter % 9 == 1 && GAMESTATE == 2) dimCounter = 0;
     } else if(jumpDelta > 20 && dimCounter < 50){
         jumpDelta++;
         if(!upsideDown) player.y = -(0.015) * (jumpDelta - 20) * (jumpDelta - 52) + 23;
@@ -114,14 +116,15 @@ void playerJump() {
 }
 
 void updatePlayer() {
+    timeCounter++;
     //get switches buttons, check correct answer etc.etc.
     //check collissions etc.etc.
     playerJump();
 
-    if(timeCounter == 5){
-        player.legDown = 1;
-    } else if(timeCounter == 10){
+    if(timeCounter % 5 == 0 && player.legDown){
         player.legDown = 0;
+    } else if(timeCounter % 5 == 0 && !player.legDown){
+        player.legDown = 1;
     }
 }
 
@@ -201,7 +204,6 @@ void changeDimension(){
 }
 
 void entities_update() {
-    timeCounter++;
     if(timeCounter > 130) timeCounter = 0;
 
     updatePlayer();
