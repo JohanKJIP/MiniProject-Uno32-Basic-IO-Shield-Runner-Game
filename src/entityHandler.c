@@ -50,13 +50,13 @@ void entity_init() {
 /* render player animations */
 void renderPlayer(int x, int y){
     if(player.legDown && !player.jumping) {
-        renderLegDown(x, y);
+        renderLegDown(x, y, upsideDown);
     } else if(!player.legDown && !player.jumping){
-        renderLegUp(x, y);
+        renderLegUp(x, y, upsideDown);
     } else if(player.jumping && player.y > 25){
-        renderJumpingGround(x, y);
+        renderJumpingGround(x, y, upsideDown);
     } else {
-        renderJumpingAir(x, y);
+        renderJumpingAir(x, y, upsideDown);
     }
 }
 
@@ -93,18 +93,19 @@ checkCollisions(){
 
 /* jumping function */
 void playerJump() {
-    if(jumpDelta >= 27 && getbtns() == 4) {
+    if(jumpDelta >= 27 && dimCounter == 50 && getbtns() == 4) {
         jumpDelta = 0;
         player.jumping = 1;
-    } else if(jumpDelta < 27 && player.y <= FLOOR_Y_UP && !upsideDown) {
+    } else if(jumpDelta < 27) {
         jumpDelta++;
-        player.y = (((jumpDelta - 27) * jumpDelta*jumpDelta) / 240) + 29;
+        if(player.y <= FLOOR_Y_UP && !upsideDown) player.y = (((jumpDelta - 27) * jumpDelta*jumpDelta) / 240) + 29;
+        else player.y = -(((jumpDelta - 27) * jumpDelta*jumpDelta) / 240) + 8;
         if(jumpDelta == 20 && dimCounter == 50) dimCounter = 0;
-    } else if(jumpDelta < 27 && player.y >= FLOOR_Y_DOWN && upsideDown){
+    } else if(jumpDelta > 20 && dimCounter < 50){
         jumpDelta++;
-        player.y = -(((jumpDelta - 27) * jumpDelta*jumpDelta) / 240) + 8;
-        if(jumpDelta == 20 && dimCounter == 50) dimCounter = 0;
-    }else{
+        if(!upsideDown) player.y = -(0.015) * (jumpDelta - 20) * (jumpDelta - 52) + 23;
+        else player.y = 0.015 * (jumpDelta - 20) * (jumpDelta - 52) + 13;
+    } else{
         if(!upsideDown) player.y = FLOOR_Y_UP;
         else player.y = FLOOR_Y_DOWN;
         jumpDelta = 27;
