@@ -50,13 +50,13 @@ void entity_init() {
 /* render player animations */
 void renderPlayer(int x, int y){
     if(player.legDown && !player.jumping) {
-        renderLegDown(x, y);
+        renderLegDown(x, y, upsideDown);
     } else if(!player.legDown && !player.jumping){
-        renderLegUp(x, y);
+        renderLegUp(x, y, upsideDown);
     } else if(player.jumping && player.y > 25){
-        renderJumpingGround(x, y);
+        renderJumpingGround(x, y, upsideDown);
     } else {
-        renderJumpingAir(x, y);
+        renderJumpingAir(x, y, upsideDown);
     }
 }
 

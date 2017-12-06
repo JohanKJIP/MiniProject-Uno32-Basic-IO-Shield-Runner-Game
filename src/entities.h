@@ -30,62 +30,115 @@ typedef struct Obstacle {
 } Obstacle;
 
 /* render leg down running animation */
-void renderLegDown(int x, int y){
-    displayPixel(x,y-3);
-    displayPixel(x,y-4);
-    displayPixel(x+1,y);
-    displayPixel(x+1,y-1);
-    displayPixel(x+1,y-2);
-    displayPixel(x+1,y-3);
-    displayPixel(x+1,y-4);
-    displayPixel(x+1,y-5);
-    displayPixel(x+2,y-2);
-    displayPixel(x+2,y-4);
-    displayPixel(x+3,y-1);
-    displayPixel(x+3,y-2);
+void renderLegDown(int x, int y, int upsideDown){
+    if(!upsideDown){
+        displayPixel(x,y-3);
+        displayPixel(x,y-4);
+        displayPixel(x+1,y);
+        displayPixel(x+1,y-1);
+        displayPixel(x+1,y-2);
+        displayPixel(x+1,y-3);
+        displayPixel(x+1,y-4);
+        displayPixel(x+1,y-5);
+        displayPixel(x+2,y-2);
+        displayPixel(x+2,y-4);
+        displayPixel(x+3,y-1);
+        displayPixel(x+3,y-2);
+    } else {
+        displayPixel(x,y-1);
+        displayPixel(x,y-2);
+        displayPixel(x+1,y);
+        displayPixel(x+1,y-1);
+        displayPixel(x+1,y-2);
+        displayPixel(x+1,y-3);
+        displayPixel(x+1,y-4);
+        displayPixel(x+1,y-5);
+        displayPixel(x+2,y-1);
+        displayPixel(x+2,y-3);
+        displayPixel(x+3,y-3);
+        displayPixel(x+3,y-4);
+    }
 }
 
 /* render leg up running animation */
-void renderLegUp(int x, int y){
-    displayPixel(x,y-3);
-    displayPixel(x,y-4);
-    displayPixel(x,y-1);
-    displayPixel(x+1,y-1);
-    displayPixel(x+1,y-2);
-    displayPixel(x+1,y-3);
-    displayPixel(x+1,y-4);
-    displayPixel(x+1,y-4);
-    displayPixel(x+1,y-5);
-    displayPixel(x+2,y);
-    displayPixel(x+2,y-1);
-    displayPixel(x+2,y-2);
-    displayPixel(x+2,y-4);
+void renderLegUp(int x, int y, int upsideDown){
+    if(!upsideDown){
+        displayPixel(x,y-3);
+        displayPixel(x,y-4);
+        displayPixel(x,y-1);
+        displayPixel(x+1,y-1);
+        displayPixel(x+1,y-2);
+        displayPixel(x+1,y-3);
+        displayPixel(x+1,y-4);
+        displayPixel(x+1,y-5);
+        displayPixel(x+2,y);
+        displayPixel(x+2,y-1);
+        displayPixel(x+2,y-2);
+        displayPixel(x+2,y-4);
+    } else{
+        displayPixel(x,y-1);
+        displayPixel(x,y-2);
+        displayPixel(x,y-4);
+        displayPixel(x+1,y);
+        displayPixel(x+1,y-1);
+        displayPixel(x+1,y-2);
+        displayPixel(x+1,y-3);
+        displayPixel(x+1,y-4);
+        displayPixel(x+2,y-1);
+        displayPixel(x+2,y-3);
+        displayPixel(x+2,y-4);
+        displayPixel(x+2,y-5);
+    }
 }
 
 /* render first jumping animation */
-void renderJumpingGround(int x, int y){
-    displayPixel(x+1,y-1);
-    displayPixel(x+1,y-2);
-    displayPixel(x+1,y-3);
-    displayPixel(x+1,y-4);
-    displayPixel(x+2,y-1);
-    displayPixel(x+2,y-3);
-    displayPixel(x+3,y);
-    displayPixel(x+3,y-1);
+void renderJumpingGround(int x, int y, int upsideDown){
+    if(!upsideDown){
+        displayPixel(x+1,y-1);
+        displayPixel(x+1,y-2);
+        displayPixel(x+1,y-3);
+        displayPixel(x+1,y-4);
+        displayPixel(x+2,y-1);
+        displayPixel(x+2,y-3);
+        displayPixel(x+3,y);
+        displayPixel(x+3,y-1);
+    } else {
+        displayPixel(x+1,y-1);
+        displayPixel(x+1,y-2);
+        displayPixel(x+1,y-3);
+        displayPixel(x+1,y-4);
+        displayPixel(x+2,y-2);
+        displayPixel(x+2,y-4);
+        displayPixel(x+3,y-4);
+        displayPixel(x+3,y-5);
+    }
 }
 
 /* render second jumping animation */
-void renderJumpingAir(int x, int y){
-    displayPixel(x,y-1);
-    displayPixel(x+1,y-1);
-    displayPixel(x+1,y-3);
-    displayPixel(x+1,y-4);
-    displayPixel(x+2,y-1);
-    displayPixel(x+2,y-2);
-    displayPixel(x+2,y-3);
-    displayPixel(x+2,y-4);
-    displayPixel(x+2,y-5);
-    displayPixel(x+3,y-4);
+void renderJumpingAir(int x, int y, int upsideDown){
+    if(!upsideDown){
+        displayPixel(x,y-1);
+        displayPixel(x+1,y-1);
+        displayPixel(x+1,y-3);
+        displayPixel(x+1,y-4);
+        displayPixel(x+2,y-1);
+        displayPixel(x+2,y-2);
+        displayPixel(x+2,y-3);
+        displayPixel(x+2,y-4);
+        displayPixel(x+2,y-5);
+        displayPixel(x+3,y-4);
+    } else{
+        displayPixel(x,y-4);
+        displayPixel(x+1,y-1);
+        displayPixel(x+1,y-2);
+        displayPixel(x+1,y-4);
+        displayPixel(x+2,y);
+        displayPixel(x+2,y-1);
+        displayPixel(x+2,y-2);
+        displayPixel(x+2,y-3);
+        displayPixel(x+2,y-4);
+        displayPixel(x+3,y-1);
+    }
 }
 
 /* render stone animation */
