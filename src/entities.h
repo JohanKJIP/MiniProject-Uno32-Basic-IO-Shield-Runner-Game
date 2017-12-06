@@ -24,7 +24,7 @@ typedef struct Player {
 
 typedef struct Obstacle {
     enum EntityType type;
-    int x;
+    double x;
     int y;
     Hitbox hitbox;
 } Obstacle;

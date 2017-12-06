@@ -136,9 +136,10 @@ void updateObstacles() {
     //render obstacles
     //spawn new ones?
     if(obstacles[0].x < -2){
+        SCORE++;
         obstacles[0].x = 128;
     }
-    obstacles[0].x -= 1;
+    obstacles[0].x -= 0.7 + 0.05*SCORE;
 }
 
 /* update background animations */

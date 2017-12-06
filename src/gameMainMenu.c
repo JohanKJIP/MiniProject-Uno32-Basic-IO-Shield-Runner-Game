@@ -60,7 +60,7 @@ void updateMainMenu() {
     /* A button is pressed */
     if(buttons != 0) {
         GAMESTATE = 2;
-        if(buttons == 1)      DIFFICULTY = 3;      //Right most button
+        if(buttons == 1)      DIFFICULTY = 3; //Right most button
         else if(buttons == 2) DIFFICULTY = 2; //Middle button
         else if(buttons == 4) DIFFICULTY = 1; //Left most button
     }
