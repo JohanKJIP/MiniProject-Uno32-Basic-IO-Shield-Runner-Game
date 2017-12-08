@@ -72,6 +72,14 @@ void render(EntityType_t type, int x, int y) {
     }
 }
 
+void reset() {
+    obstacles[0].x = 129;
+    upsideDown = 0;
+    upsideDownValue = 0;
+    dimCounter = 50;
+    GAMESTATE = 3;
+}
+
 /* check for collision between
    player and obstacles */
 void checkCollisions(){
@@ -81,13 +89,15 @@ void checkCollisions(){
         PLAYER_X <= obstacles[i].x + obstacles[i].hitbox.width ||
         PLAYER_X  + player.hitbox.width >= (int)obstacles[i].x &&
         PLAYER_X + player.hitbox.width <= (int)obstacles[i].x + obstacles[i].hitbox.width) {
-            if(player.y > obstacles[i].y - obstacles[i].hitbox.height) {
-                obstacles[i].x = 129;
-                upsideDown = 0;
-                upsideDownValue = 0;
-                dimCounter = 50;
-                GAMESTATE = 3;
+            if(!upsideDown &&
+            player.y > obstacles[i].y - obstacles[i].hitbox.height) {
+                reset();
+            } else if(upsideDown &&
+            player.y - player.hitbox.height < obstacles[i].y) {
+                reset();
             }
+
+
         }
     }
 }
@@ -133,7 +143,7 @@ void updateObstacles() {
         SCORE++;
         obstacles[0].x = 128;
     }
-    obstacles[0].x -= 0.7 + 0.05*SCORE;
+    obstacles[0].x -= 1 + 0.02*SCORE;
     if(upsideDown) {
         obstacles[0].y = FLOOR_Y_DOWN - 4;
     } else {
@@ -188,6 +198,7 @@ void changeDimension(){
             } else{
                 upsideDownValue = 31;
                 upsideDown = 1;
+                obstacles[0].x = 135;
             }
         } else {
             if(dimCounter <= 20){
@@ -201,6 +212,7 @@ void changeDimension(){
             } else{
                 upsideDownValue = 0;
                 upsideDown = 0;
+                obstacles[0].x = 135;
             }
         }
     }
