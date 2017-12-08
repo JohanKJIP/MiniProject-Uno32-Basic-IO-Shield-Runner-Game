@@ -104,9 +104,11 @@ void checkCollisions(){
 
 /* jumping function */
 void playerJump() {
-    if(jumpDelta >= 27 && dimCounter == 50 && getbtns() == 4) {
+    if(jumpDelta >= 27 && dimCounter == 50 &&
+        getbtns() == 4 && binaryToDecimal(getsw()) == binaryNumber) {
         jumpDelta = 0;
         player.jumping = 1;
+        binaryNumber = getRandomInt(16);
     } else if(jumpDelta < 27) {
         jumpDelta++;
         if(player.y <= FLOOR_Y_UP && !upsideDown) player.y = (((jumpDelta - 27) * jumpDelta*jumpDelta) / 240) + 29;
@@ -117,7 +119,6 @@ void playerJump() {
         if(!upsideDown) player.y = -(0.015) * (jumpDelta - 20) * (jumpDelta - 52) + 23;
         else player.y = 0.015 * (jumpDelta - 20) * (jumpDelta - 52) + 13;
     } else{
-        if(obstacles[0].x <= player.x) binaryNumber = getRandomInt(4);
         if(!upsideDown) player.y = FLOOR_Y_UP;
         else player.y = FLOOR_Y_DOWN;
         jumpDelta = 27;
