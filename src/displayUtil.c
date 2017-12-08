@@ -110,8 +110,7 @@ void displayDigit(int x, int line, int value) {
 		}
 	}
 	int index = 0;
-	int numbers = sizeof(value)/sizeof(int);
-	int numberArr[numbers]; //max 10 numbers
+	int numberArr[10]; //max 10 numbers
 	while(value != 0) {
 		int num = value % 10;
 		numberArr[index] = num;
@@ -122,7 +121,7 @@ void displayDigit(int x, int line, int value) {
 	int k;
 	int i;
 	/* Draw each number in number array reversed. */
-	for (k=numbers-1; k>=0; k--) {
+	for (k=index-1; k>=0; k--) {
 		if(numberArr[k] >= 0 && numberArr[k] < 10) {
 			for (i = 0; i<5; i++) {
 				dataArray[i + x + line*128] |= charArray[(numberArr[k] + 26)*5 + i];

@@ -117,11 +117,11 @@ void playerJump() {
         if(!upsideDown) player.y = -(0.015) * (jumpDelta - 20) * (jumpDelta - 52) + 23;
         else player.y = 0.015 * (jumpDelta - 20) * (jumpDelta - 52) + 13;
     } else{
+        if(obstacles[0].x <= player.x) binaryNumber = getRandomInt(4);
         if(!upsideDown) player.y = FLOOR_Y_UP;
         else player.y = FLOOR_Y_DOWN;
         jumpDelta = 27;
         player.jumping = 0;
-        if(obstacles[0].x < player.x) binaryNumber = getRandomInt(15);
     }
 }
 
@@ -222,7 +222,7 @@ void entities_render() {
     render(obstacles[0].type, obstacles[0].x, obstacles[0].y);
     render(PLAYER,PLAYER_X,player.y);
     renderBackground();
-    displayDigit(62,1,10);
+    displayDigit(62,1,binaryNumber);
 }
 
 void entities_update() {
