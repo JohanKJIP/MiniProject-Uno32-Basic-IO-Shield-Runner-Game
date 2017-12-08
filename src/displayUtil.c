@@ -110,7 +110,7 @@ void displayDigit(int x, int line, int value) {
 		}
 	}
 	int index = 0;
-	int numbers = sizeof(value)-1;
+	int numbers = sizeof(value)/sizeof(int);
 	int numberArr[numbers]; //max 10 numbers
 	while(value != 0) {
 		int num = value % 10;
