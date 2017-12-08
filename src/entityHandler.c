@@ -105,10 +105,10 @@ void checkCollisions(){
 /* jumping function */
 void playerJump() {
     if(jumpDelta >= 27 && dimCounter == 50 &&
-        getbtns() == 4 && binaryToDecimal(getsw()) == binaryNumber) {
+        getbtns() == 4 && getsw() == binaryNumber) {
         jumpDelta = 0;
         player.jumping = 1;
-        binaryNumber = getRandomInt(16);
+        binaryNumber = getRandomInt(DIFFICULTY);
     } else if(jumpDelta < 27) {
         jumpDelta++;
         if(player.y <= FLOOR_Y_UP && !upsideDown) player.y = (((jumpDelta - 27) * jumpDelta*jumpDelta) / 240) + 29;

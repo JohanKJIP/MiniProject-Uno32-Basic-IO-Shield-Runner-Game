@@ -68,6 +68,7 @@ void animation() {
     monster.x = -30;
     int legDownMonster = 1;
     while (counter < 1500) {
+        binaryNumber = getsw();
         if(counter % 10 == 0) {
             player.x += 1;
             monster.x += 1;
@@ -88,12 +89,13 @@ void updateMainMenu() {
     mainMenuScreen();
     display_update();
     int buttons = getbtns();
+    binaryNumber = getsw();
     /* A button is pressed */
     if(buttons != 0) {
         animation();
         GAMESTATE = 2;
-        if(buttons == 1)      DIFFICULTY = 3; //Right most button
-        else if(buttons == 2) DIFFICULTY = 2; //Middle button
-        else if(buttons == 4) DIFFICULTY = 1; //Left most button
+        if(buttons == 1)      DIFFICULTY = 16; //Right most button
+        else if(buttons == 2) DIFFICULTY = 8; //Middle button
+        else if(buttons == 4) DIFFICULTY = 4; //Left most button
     }
 }
