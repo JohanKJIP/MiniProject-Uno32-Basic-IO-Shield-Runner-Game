@@ -24,6 +24,7 @@ void updateLeaderBoard(void);
 extern int GAMESTATE;
 extern int DIFFICULTY;
 extern int SCORE;
+extern int binaryNumber;
 
 /* Functions from gameRunning.c */
 int getRandomInt(int);

@@ -77,7 +77,10 @@ void render(EntityType_t type, int x, int y) {
 void checkCollisions(){
     int i;
     for(i = 0; i < 1; i++){
-        if(PLAYER_X == (int)obstacles[i].x || PLAYER_X == (int)obstacles[i].x + obstacles[i].hitbox.width) {
+        if(PLAYER_X >= obstacles[i].x &&
+        PLAYER_X <= obstacles[i].x + obstacles[i].hitbox.width ||
+        PLAYER_X  + player.hitbox.width >= (int)obstacles[i].x &&
+        PLAYER_X + player.hitbox.width <= (int)obstacles[i].x + obstacles[i].hitbox.width) {
             if(player.y > obstacles[i].y - obstacles[i].hitbox.height) {
                 obstacles[i].x = 129;
                 upsideDown = 0;
@@ -108,10 +111,7 @@ void playerJump() {
         else player.y = FLOOR_Y_DOWN;
         jumpDelta = 27;
         player.jumping = 0;
-    }
-    if(getbtns() != 2) {
-        player.crouching = 0;
-        player.hitbox.height = 10;
+        if(obstacles[0].x < player.x) binaryNumber = getRandomInt(15);
     }
 }
 
@@ -210,6 +210,7 @@ void entities_render() {
     render(obstacles[0].type, obstacles[0].x, obstacles[0].y);
     render(PLAYER,PLAYER_X,player.y);
     renderBackground();
+    displayDigit(62,1,10);
 }
 
 void entities_update() {
