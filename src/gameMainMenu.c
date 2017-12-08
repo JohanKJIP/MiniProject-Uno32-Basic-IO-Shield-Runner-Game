@@ -66,15 +66,17 @@ void animation() {
     int counter = 0;
     Monster monster;
     monster.x = -30;
+    int legDownMonster = 1;
     while (counter < 1500) {
         if(counter % 10 == 0) {
             player.x += 1;
             monster.x += 1;
             updatePlayer();
         }
+        if(counter % 50 == 0) legDownMonster = !legDownMonster;
         mainMenuScreen();
         render(player.type,player.x,player.y);
-        render(PLAYER,monster.x,FLOOR_Y_UP);
+        renderMonster(monster.x, FLOOR_Y_UP, legDownMonster);
         display_update();
         counter++;
     }
