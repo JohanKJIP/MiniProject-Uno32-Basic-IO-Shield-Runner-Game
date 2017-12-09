@@ -40,11 +40,10 @@ void highScoresScreen(){
 }
 
 /* Update the high score screen */
-void updateHighScores(){    
+void updateHighScores(){
     highScoresScreen();
-    display_update();
-    sleep(20);
-    if(getbtn1()){
+    display_update();    
+    if(getbtn1() == 0){
         GAMESTATE = 1;
     }
 }
