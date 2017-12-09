@@ -1,3 +1,7 @@
+//-----------------------------
+// Written by johvh & davidjo2.
+//-----------------------------
+
 /*  Header file for game functions */
 #include <stdint.h>
 
@@ -14,7 +18,6 @@ uint8_t dataArray[512];
 /* Functions from utils.c */
 int getbtns(void);
 int getsw(void);
-void enable_interrupt(void);
 
 /* Functions from Main.c */
 void updateRunning(void);

@@ -1,3 +1,8 @@
+//-----------------------------
+// Written by johvh & davidjo2.
+//-----------------------------
+
+/* Array for all the letters, numbers and stuff. */
 uint8_t charArray[185] = {
     0xFC, 0x12, 0x12, 0x12, 0xFC, // A
 

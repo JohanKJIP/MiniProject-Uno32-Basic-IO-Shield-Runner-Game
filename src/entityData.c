@@ -1,3 +1,7 @@
+//-----------------------------
+// Written by johvh & davidjo2.
+//-----------------------------
+
 #include "entities.h"
 #include <stdint.h>
 

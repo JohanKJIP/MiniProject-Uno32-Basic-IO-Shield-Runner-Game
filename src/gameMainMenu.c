@@ -1,9 +1,16 @@
+//-----------------------------
+// Written by johvh & davidjo2.
+//-----------------------------
+
 #include <stdint.h>
-#include <pic32mx.h>
 #include "gameHeader.h"
 #include "entities.h"
 
+/*
+* Screen to render when in the main menu.
+*/
 void mainMenuScreen() {
+    /* Start x for stranger things logo */
     int startX = 36;
     int k;
     for (k = 0; k < 512; k++) {
@@ -53,49 +60,62 @@ void mainMenuScreen() {
 }
 
 void animation() {
+    /* Animation duration counter */
+    int counter = 0;
+
+    /* Init a new player */
     player.type = PLAYER;
     player.x = -2;
     player.y = FLOOR_Y_UP;
-    player.playerScore = 0;
     player.jumping = 0;
     player.crouching = 0;
     player.legDown = 0;
-    player.hitbox.width = 4;
-    player.hitbox.height = 6;
 
-    int counter = 0;
+    /* Init monster */
     Monster monster;
     monster.x = -30;
     int legDownMonster = 1;
+
+    /* Animation loop */
     while (counter < 1500) {
+        /* Always set binary number to switches so player can jump */
         binaryNumber = getsw();
+        /* Increment x and update player */
         if(counter % 10 == 0) {
             player.x += 1;
             monster.x += 1;
             updatePlayer();
         }
+        /* Change leg down for monster */
         if(counter % 50 == 0) legDownMonster = !legDownMonster;
+        /* Draw main menu screen */
         mainMenuScreen();
+        /* Render the monsters */
         render(player.type,player.x,player.y);
         renderMonster(monster.x, FLOOR_Y_UP, legDownMonster);
+        /* Update display */
         display_update();
         counter++;
     }
 }
 
-/* Code duplication!
+/*
+* Main menu screen loop.
 */
 void updateMainMenu() {
+    /* Draw main menu screen */
     mainMenuScreen();
+    /* Update screen */
     display_update();
+    /* Get buttons and switches */
     int buttons = getbtns();
     binaryNumber = getsw();
-    /* A button is pressed */
+    /* A button is pressed, draw animation and switch state */
     if(buttons != 0) {
         animation();
         GAMESTATE = 2;
         if(buttons == 1)      DIFFICULTY = 16; //Right most button
-        else if(buttons == 2) DIFFICULTY = 8; //Middle button
-        else if(buttons == 4) DIFFICULTY = 4; //Left most button
+        else if(buttons == 2) DIFFICULTY = 8;  //Middle button
+        else if(buttons == 4) DIFFICULTY = 4;  //Left most button
     }
 }
