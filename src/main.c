@@ -13,6 +13,10 @@
 //#include <time.h>   /*TODO */
 #include <stdlib.h> /*TODO */
 
+/* Interrupt Service Routine */
+void user_isr(void) {    
+}
+
 volatile int* ledp;
 /* Init basic functions */
 void init( void ) {
@@ -33,7 +37,7 @@ void init( void ) {
     PR2 = 31250; //period register
 
     /* timer interrupt enable */
-    IEC(0) |= 0x100;    //enable interrupt flag
+    IEC(0) |= 0x80;    //enable interrupt flag
     IPC(2) |= 0x1f;     //set priority
     enable_interrupt(); //enable global interrupt
 }
@@ -91,6 +95,7 @@ int main(void) {
     entity_init();  /* Game entity setup */
     int accumulator = 0; /* Used to control update speed */
 	while(1) {
+        clearDisplay();
         if(GAMESTATE == 1) {
             updateMainMenu();
         } else if(GAMESTATE == 2) {
@@ -98,7 +103,7 @@ int main(void) {
         } else if(GAMESTATE == 3) {
             updateGameOver();
         } else if(GAMESTATE == 4) {
-            //updateLeaderBoard();
+            updateHighScores();
         }
 	}
 	return 0;
