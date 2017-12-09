@@ -75,6 +75,7 @@ void render(EntityType_t type, int x, int y) {
 }
 
 void reset() {
+    evalueteScore();
     obstacles[0].x = 129;
     upsideDown = 0;
     upsideDownValue = 0;

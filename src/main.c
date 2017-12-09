@@ -7,6 +7,19 @@
 #include <stdlib.h>
 #include "gameHeader.h"
 
+/* Interrupt Service Routine */
+void user_isr(void) {
+    /* timer */
+    T2CON |= 0x8000; //timer 2 control register
+    T2CON |= 0x70;
+    PR2 = 31250; //period register
+
+    /* timer interrupt enable */
+    IEC(0) |= 0x80;    //enable interrupt flag
+    IPC(2) |= 0x1f;     //set priority
+    enable_interrupt(); //enable global interrupt    
+}
+
 volatile int* ledp;
 /* Init basic functions */
 void init( void ) {
@@ -20,12 +33,6 @@ void init( void ) {
 
     /*  enable buttons to input */
     TRISD |= 0xFE0;
-}
-
-/* Interrupts not used,
-left here if we want to use it in the future */
-void user_isr(void) {
-    //do nothing.
 }
 
 /* Current game state */
@@ -85,7 +92,7 @@ int main(void) {
     entity_init();
     /* Main game loop */
 	while(1) {
-        /* Update different parts of the game depending on state */
+        clearDisplay();
         if(GAMESTATE == 1) {
             updateMainMenu();
         } else if(GAMESTATE == 2) {
@@ -93,7 +100,7 @@ int main(void) {
         } else if(GAMESTATE == 3) {
             updateGameOver();
         } else if(GAMESTATE == 4) {
-            //updateLeaderBoard();
+            updateHighScores();
         }
 	}
 	return 0;

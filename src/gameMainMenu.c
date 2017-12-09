@@ -110,8 +110,12 @@ void updateMainMenu() {
     /* Get buttons and switches */
     int buttons = getbtns();
     binaryNumber = getsw();
-    /* A button is pressed, draw animation and switch state */
-    if(buttons != 0) {
+    /* A button is pressed */
+    if(getbtn1()) {
+        clearDisplay();
+        /* Go to high score screen */
+        GAMESTATE = 4;
+    } else if(buttons != 0){
         animation();
         GAMESTATE = 2;
         if(buttons == 1)      DIFFICULTY = 16; //Right most button

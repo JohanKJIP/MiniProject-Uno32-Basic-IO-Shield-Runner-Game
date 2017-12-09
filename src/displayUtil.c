@@ -159,6 +159,16 @@ void display_update(void) {
 }
 
 /**
+ * Clear screen
+ */
+void clearDisplay(void) {
+	int i;
+	for(i=0; i<DATA_ARRAY_SIZE; i++) {
+		dataArray[i] = 0x0;
+	}
+}
+
+/**
  * Initialise display.
  */
 void display_init(void) {
