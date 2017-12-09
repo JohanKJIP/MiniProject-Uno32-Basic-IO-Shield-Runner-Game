@@ -1,3 +1,7 @@
+//-----------------------------
+// Written by johvh & davidjo2.
+//-----------------------------
+
 #include <stdint.h>
 #include <pic32mx.h>
 #include "gameHeader.h"

@@ -1,20 +1,23 @@
-/* mipslabmain.c
+//-----------------------------
+// Written by johvh & davidjo2.
+//-----------------------------
 
-   This file written 2015 by Axel Isaksson,
-   modified 2015, 2017 by F Lundevall
-
-   Latest update 2017-04-21 by F Lundevall
-
-   For copyright and licensing, see file COPYING */
-
-#include <stdint.h>   /* Declarations of uint_32 and the like */
-#include <pic32mx.h>  /* Declarations of system-specific addresses etc */
+#include <stdint.h>
+#include <pic32mx.h>
+#include <stdlib.h>
 #include "gameHeader.h"
-//#include <time.h>   /*TODO */
-#include <stdlib.h> /*TODO */
 
 /* Interrupt Service Routine */
-void user_isr(void) {    
+void user_isr(void) {
+    /* timer */
+    T2CON |= 0x8000; //timer 2 control register
+    T2CON |= 0x70;
+    PR2 = 31250; //period register
+
+    /* timer interrupt enable */
+    IEC(0) |= 0x80;    //enable interrupt flag
+    IPC(2) |= 0x1f;     //set priority
+    enable_interrupt(); //enable global interrupt    
 }
 
 volatile int* ledp;
@@ -30,29 +33,18 @@ void init( void ) {
 
     /*  enable buttons to input */
     TRISD |= 0xFE0;
-
-    /* timer */
-    T2CON |= 0x8000; //timer 2 control register
-    T2CON |= 0x70;
-    PR2 = 31250; //period register
-
-    /* timer interrupt enable */
-    IEC(0) |= 0x80;    //enable interrupt flag
-    IPC(2) |= 0x1f;     //set priority
-    enable_interrupt(); //enable global interrupt
 }
 
+/* Current game state */
 int GAMESTATE = 1;
+/* Current difficulty */
 int DIFFICULTY;
+/* Current score */
 int SCORE = 0;
 
+/* Program entry point */
 int main(void) {
-    //srand(time(NULL));
-        /*
-	  This will set the peripheral bus clock to the same frequency
-	  as the sysclock. That means 80 MHz, when the microcontroller
-	  is running at 80 MHz. Changed 2017, as recommended by Axel.
-	*/
+    /* === Code from lab */
 	SYSKEY = 0xAA996655;  /* Unlock OSCCON, step 1 */
 	SYSKEY = 0x556699AA;  /* Unlock OSCCON, step 2 */
 	while(OSCCON & (1 << 21)); /* Wait until PBDIV ready */
@@ -89,11 +81,16 @@ int main(void) {
 	SPI2CONSET = 0x20;
 	/* SPI2CON bit ON = 1; */
 	SPI2CONSET = 0x8000;
+    /* === Code from lab */
 
-	display_init(); /* Display setup */
-	init();         /* Chipkit setup */
-    entity_init();  /* Game entity setup */
-    int accumulator = 0; /* Used to control update speed */
+    /* >>> Our code  */
+    /* Display setup */
+	display_init();
+    /* Init led, buttons and switches */
+	init();
+    /* Init all the entities */
+    entity_init();
+    /* Main game loop */
 	while(1) {
         clearDisplay();
         if(GAMESTATE == 1) {

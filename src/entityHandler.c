@@ -1,12 +1,16 @@
+//-----------------------------
+// Written by johvh & davidjo2.
+//-----------------------------
+
 #include <stdint.h>
 #include "entities.h"
 #include "gameHeader.h"
 
-#define PLAYER_X 10                    //player entity
+/* Player entity */
+#define PLAYER_X 10
 
-/* obstacle variable */
-#define MAX_OBSTACLE_AMOUNT 10
-Obstacle obstacles[MAX_OBSTACLE_AMOUNT];         //obstacle array
+/* Obstacle variable */
+Obstacle obstacle;
 int obstacleAmount = 0;
 
 /* counters */
@@ -22,14 +26,14 @@ int upsideDown = 0;
 int upsideDownValue = 0;
 int dimCounter = 50;
 
+/* Init player */
 Player player;
 
 /* add obstacle to array */
 void add_obstacle(){
-    if(obstacleAmount < MAX_OBSTACLE_AMOUNT){
-        Obstacle obstacle = { .type = STONE, .x = 129, .y = FLOOR_Y_UP, .hitbox = { .width = 3, .height = 3} }; //TODO randomize size
-        obstacles[0] = obstacle;
-    }
+    /* Adde obstacle, save space */
+    Obstacle obs = { .type = STONE, .x = 129, .y = FLOOR_Y_UP, .hitbox = { .width = 3, .height = 3}};
+    obstacle = obs;
 }
 
 void entity_init() {
@@ -64,8 +68,6 @@ void render(EntityType_t type, int x, int y) {
         case PLAYER:
             renderPlayer(x, y);
             break;
-        case BIRD:
-            break;
         case STONE:
             renderStone(x, y);
             break;
@@ -74,7 +76,7 @@ void render(EntityType_t type, int x, int y) {
 
 void reset() {
     evalueteScore();
-    obstacles[0].x = 129;
+    obstacle.x = 129;
     upsideDown = 0;
     upsideDownValue = 0;
     dimCounter = 50;
@@ -84,21 +86,16 @@ void reset() {
 /* check for collision between
    player and obstacles */
 void checkCollisions(){
-    int i;
-    for(i = 0; i < 1; i++){
-        if(PLAYER_X >= obstacles[i].x &&
-        PLAYER_X <= obstacles[i].x + obstacles[i].hitbox.width ||
-        PLAYER_X  + player.hitbox.width >= (int)obstacles[i].x &&
-        PLAYER_X + player.hitbox.width <= (int)obstacles[i].x + obstacles[i].hitbox.width) {
-            if(!upsideDown &&
-            player.y > obstacles[i].y - obstacles[i].hitbox.height) {
-                reset();
-            } else if(upsideDown &&
-            player.y - player.hitbox.height < obstacles[i].y) {
-                reset();
-            }
-
-
+    if(PLAYER_X >= obstacle.x &&
+    PLAYER_X <= obstacle.x + obstacle.hitbox.width ||
+    PLAYER_X  + player.hitbox.width >= (int)obstacle.x &&
+    PLAYER_X + player.hitbox.width <= (int)obstacle.x + obstacle.hitbox.width) {
+        if(!upsideDown &&
+        player.y > obstacle.y - obstacle.hitbox.height) {
+            reset();
+        } else if(upsideDown &&
+        player.y - player.hitbox.height < obstacle.y) {
+            reset();
         }
     }
 }
@@ -141,15 +138,15 @@ void updatePlayer() {
 }
 
 void updateObstacles() {
-    if(obstacles[0].x < -2){
+    if(obstacle.x < -2){
         SCORE++;
-        obstacles[0].x = 128;
+        obstacle.x = 128;
     }
-    obstacles[0].x -= 1 + 0.02*SCORE;
+    obstacle.x -= 1 + 0.02*SCORE;
     if(upsideDown) {
-        obstacles[0].y = FLOOR_Y_DOWN - 4;
+        obstacle.y = FLOOR_Y_DOWN - 4;
     } else {
-        obstacles[0].y = FLOOR_Y_UP;
+        obstacle.y = FLOOR_Y_UP;
     }
 }
 
@@ -200,7 +197,7 @@ void changeDimension(){
             } else{
                 upsideDownValue = 31;
                 upsideDown = 1;
-                obstacles[0].x = 135;
+                obstacle.x = 135;
             }
         } else {
             if(dimCounter <= 20){
@@ -214,14 +211,14 @@ void changeDimension(){
             } else{
                 upsideDownValue = 0;
                 upsideDown = 0;
-                obstacles[0].x = 135;
+                obstacle.x = 135;
             }
         }
     }
 }
 
 void entities_render() {
-    render(obstacles[0].type, obstacles[0].x, obstacles[0].y);
+    render(obstacle.type, obstacle.x, obstacle.y);
     render(PLAYER,PLAYER_X,player.y);
     renderBackground();
     displayDigit(62,1,binaryNumber);

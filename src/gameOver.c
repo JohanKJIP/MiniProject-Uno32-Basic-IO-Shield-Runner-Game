@@ -1,5 +1,8 @@
+//-----------------------------
+// Written by johvh & davidjo2.
+//-----------------------------
+
 #include <stdint.h>
-#include <pic32mx.h>
 #include "gameHeader.h"
 
 /**
@@ -26,11 +29,12 @@ void gameOverScreen(int val, int size) {
 }
 
 /*
+* Updating loop for the game over screen
 */
 void updateGameOver() {
+	/* Draw game over screen */
     gameOverScreen(0,512);
-	/* Sleep and update twice. When doing it once there is a chance the display doesn't update. (why?) */
-	sleep(20);
+	/* update twice. When doing it once there is a chance the display doesn't update. (why??) */
     display_update();
 	display_update();
 	/* Display game over for a few seconds */

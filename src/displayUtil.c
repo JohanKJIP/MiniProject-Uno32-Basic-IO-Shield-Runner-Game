@@ -7,6 +7,7 @@
 #include "displayData.h"
 #include "gameHeader.h"
 
+/* === From lab (very useful) */
 #define DISPLAY_CHANGE_TO_COMMAND_MODE (PORTFCLR = 0x10)
 #define DISPLAY_CHANGE_TO_DATA_MODE (PORTFSET = 0x10)
 
@@ -18,7 +19,9 @@
 
 #define DISPLAY_TURN_OFF_VDD (PORTFSET = 0x40)
 #define DISPLAY_TURN_OFF_VBAT (PORTFSET = 0x20)
+/* === From lab */
 
+/* Data aray buffer */
 #define DATA_ARRAY_SIZE 512
 
 /**
@@ -43,10 +46,14 @@ void sendSPI(uint8_t data) {
  * Add a single pixel to the render buffer at specified position.
  */
 void displayPixel(int x, int y) {
+	/* Check that the pixel is within the screen */
 	if(x<128 && y<32 && !(x < 0) && !(y < 0)) {
-		int yOffset = y % 8;            // array pos value (0-8, where 0 is upper pixel, 8 is lowest pixel)
-		int page = y / 8;               // page position index
-		int arrayPos = page*128 + x;    // position in the array (0-512)
+		/* array pos value (0-8, where 0 is upper pixel, 8 is lowest pixel) */
+		int yOffset = y % 8;
+		/* on which page the pixel is */
+		int page = y / 8;
+		/* position in the data buffer array */
+		int arrayPos = page*128 + x;
 
 		/* OR pixel with current value in the column. (1 = 1, 2 = 10, 3 = 100 ...) */
 		dataArray[arrayPos] = dataArray[arrayPos] | (0x1 << yOffset);
@@ -57,8 +64,11 @@ void displayPixel(int x, int y) {
  * Add a hex to the render buffer at specified location.
  */
 void displayHex(int x, int line, int value) {
+	/* Check that the pixel is within the screen */
 	if(x<128 && x>=0 && line >= 0 && line < 4) {
+		/* position in data buffer array */
 		int arrayPos = 128*line + x;
+		/* or the value into data buffer array */
 		dataArray[arrayPos] = dataArray[arrayPos] | value;
 	}
 }
@@ -103,16 +113,22 @@ void displayString(int x, int line, char* string) {
 * Draw an integer on the display.
 */
 void displayDigit(int x, int line, int value) {
+	/* If the digit is 0 */
 	int j;
 	if(value == 0) {
 		for (j = 0; j<5; j++) {
 			dataArray[j + x + line*128] |= charArray[26*5 + j];
 		}
 	}
+	/* index == numbers of digits in the number */
 	int index = 0;
-	int numberArr[10]; //max 10 numbers
+	/* Max 10 numbers */
+	int numberArr[10];
+	/* Do while not 0, (still digits left) */
 	while(value != 0) {
+		/* Right-most digit */
 		int num = value % 10;
+		/* Add to number array */
 		numberArr[index] = num;
 		/* Next number */
 		value = value / 10;
@@ -135,7 +151,7 @@ void displayDigit(int x, int line, int value) {
  * Update the display.
  */
 void display_update(void) {
-	// send render buffer to screen
+	/* send render buffer to screen */
 	int i;
 	for(i=0; i<DATA_ARRAY_SIZE; i++) {
 		sendSPI(dataArray[i]);
@@ -156,6 +172,7 @@ void clearDisplay(void) {
  * Initialise display.
  */
 void display_init(void) {
+	/* === from lab */
     DISPLAY_CHANGE_TO_COMMAND_MODE;
     sleep(10);
 	DISPLAY_ACTIVATE_VDD;
@@ -181,11 +198,17 @@ void display_init(void) {
 
     sendSPI(0xDA);
     sendSPI(0x20);
+	/* === from lab */
 
-	sendSPI(0x20); // Set addressing mode
-	sendSPI(0x0);  // Horizontal addressing mode
+	/* >>> our code */
+	/* Set addressing mode command */
+	sendSPI(0x20);
+	/* Change it to Horizontal addressing mode */
+	sendSPI(0x0);
 
-    sendSPI(0xAF); // Turn on display
+	/* Turn on display */
+    sendSPI(0xAF);
 	sleep(100);
+	/* Change to data mode */
 	DISPLAY_CHANGE_TO_DATA_MODE;
 }
