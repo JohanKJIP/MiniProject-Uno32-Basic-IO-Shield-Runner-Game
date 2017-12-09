@@ -98,7 +98,7 @@ int main(void) {
         } else if(GAMESTATE == 3) {
             updateGameOver();
         } else if(GAMESTATE == 4) {
-            //updateLeaderBoard();
+            updateHighScores();
         }
 	}
 	return 0;
