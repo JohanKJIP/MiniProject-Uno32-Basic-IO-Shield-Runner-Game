@@ -9,5 +9,10 @@ int getsw(void) {
 
 /* get input from buttons */
 int getbtns(void) {
-    return (PORTF << 3 & 0x8) || (PORTD >> 5 & 0x7);
+    return PORTD >> 5 & 0x7;
+}
+
+/* get input from first button */
+int getbtn1(void){
+    return PORTF & 0x2;
 }

@@ -90,7 +90,7 @@ int main(void) {
 	init();         /* Chipkit setup */
     entity_init();  /* Game entity setup */
     int accumulator = 0; /* Used to control update speed */
-	while(1) {
+	while(1) {              
         if(GAMESTATE == 1) {
             updateMainMenu();
         } else if(GAMESTATE == 2) {

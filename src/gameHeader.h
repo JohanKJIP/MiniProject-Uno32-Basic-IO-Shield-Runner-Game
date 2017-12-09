@@ -8,11 +8,13 @@ void display_init(void);
 void display_update(void);
 void displayString(int,int,char*);
 void displayDigit(int,int,int);
+void clearDisplay(void);
 void sleep(int);
 uint8_t dataArray[512];
 
 /* Functions from utils.c */
 int getbtns(void);
+int getbtn1(void);
 int getsw(void);
 void enable_interrupt(void);
 

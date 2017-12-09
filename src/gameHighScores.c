@@ -3,6 +3,7 @@
 */
 
 #include <stdint.h>
+#include <pic32mx.h>
 #include "gameHeader.h"
 
 int HIGH_SCORE_1 = 0;
@@ -27,22 +28,23 @@ void evalueteScore(void){
 /* Display content of high score screen */
 void highScoresScreen(){
     /* Display high scores */
-    displayString(30, 1, "High Scores");  //Preliminary values
-	displayString(20, 2, "1: ");
-	displayDigit(36, 2, HIGH_SCORE_1);
-    displayString(52, 2, "2: ");
-    displayDigit(68, 2, HIGH_SCORE_2);
-    displayString(84, 2, "3: ");
-    displayDigit(100, 2, HIGH_SCORE_3);
+    displayString(30, 1, "High Scores");
+	displayString(7, 2, "easy:");
+    displayDigit(39, 2, HIGH_SCORE_1);
+    displayString(65, 2, "medium:");
+    displayDigit(111, 2, HIGH_SCORE_2);
+    displayString(40, 3, "hard: ");
+    displayDigit(72, 3, HIGH_SCORE_3);
 
     //TODO create additional monster animation
 }
 
 /* Update the high score screen */
-void updateHighScores(){
+void updateHighScores(){    
     highScoresScreen();
     display_update();
-    if(getbtns() != 0 && getbtns() != 8){
+    sleep(20);
+    if(getbtn1()){
         GAMESTATE = 1;
     }
 }

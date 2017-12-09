@@ -91,7 +91,8 @@ void updateMainMenu() {
     int buttons = getbtns();
     binaryNumber = getsw();
     /* A button is pressed */
-    if(buttons == 8) {
+    if(getbtn1()) {
+        clearDisplay();
         /* Go to high score screen */
         GAMESTATE = 4;
     } else if(buttons != 0){
