@@ -1,12 +1,16 @@
+//-----------------------------
+// Written by johvh & davidjo2.
+//-----------------------------
+
 #include <stdint.h>
 #include "entities.h"
 #include "gameHeader.h"
 
-#define PLAYER_X 10                    //player entity
+/* Player entity */
+#define PLAYER_X 10
 
-/* obstacle variable */
-#define MAX_OBSTACLE_AMOUNT 10
-Obstacle obstacles[MAX_OBSTACLE_AMOUNT];         //obstacle array
+/* Obstacle variable */
+Obtacle obstacle;
 int obstacleAmount = 0;
 
 /* counters */
@@ -22,14 +26,12 @@ int upsideDown = 0;
 int upsideDownValue = 0;
 int dimCounter = 50;
 
+/* Init player */
 Player player;
 
 /* add obstacle to array */
 void add_obstacle(){
-    if(obstacleAmount < MAX_OBSTACLE_AMOUNT){
-        Obstacle obstacle = { .type = STONE, .x = 129, .y = FLOOR_Y_UP, .hitbox = { .width = 3, .height = 3} }; //TODO randomize size
-        obstacles[0] = obstacle;
-    }
+    obstacle = { .type = STONE, .x = 129, .y = FLOOR_Y_UP, .hitbox = { .width = 3, .height = 3} };
 }
 
 void entity_init() {
