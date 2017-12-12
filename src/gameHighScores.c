@@ -42,7 +42,7 @@ void highScoresScreen(){
 /* Update the high score screen */
 void updateHighScores(){
     highScoresScreen();
-    display_update();    
+    display_update();
     if(getbtn1() == 0){
         GAMESTATE = 1;
     }
