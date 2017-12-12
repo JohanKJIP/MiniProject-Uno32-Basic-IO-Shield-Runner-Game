@@ -97,6 +97,7 @@ void animation() {
         display_update();
         counter++;
     }
+    binaryNumber = getRandomInt(DIFFICULTY);
 }
 
 /*
@@ -116,10 +117,10 @@ void updateMainMenu() {
         /* Go to high score screen */
         GAMESTATE = 4;
     } else if(buttons != 0){
-        animation();
         GAMESTATE = 2;
         if(buttons == 1)      DIFFICULTY = 16; //Right most button
         else if(buttons == 2) DIFFICULTY = 8;  //Middle button
         else if(buttons == 4) DIFFICULTY = 4;  //Left most button
+        animation();
     }
 }

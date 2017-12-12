@@ -36,25 +36,31 @@ void add_obstacle(){
     obstacle = obs;
 }
 
+/* Initialise entities */
 void entity_init() {
+    /* Player */
     player.type = PLAYER;
-    player.y = FLOOR_Y_UP; //floor level
+    player.y = FLOOR_Y_UP;
     player.playerScore = 0;
     player.jumping = 0;
     player.crouching = 0;
     player.legDown = 0;
-    player.hitbox.width = 4;       //preliminary width
-    player.hitbox.height = 6;      //preliminary height
+    player.hitbox.width = 4;
+    player.hitbox.height = 6;
 
+    /* Obstacle */
     add_obstacle();
 }
 
 /* render player animations */
 void renderPlayer(int x, int y){
+    /* If leg down and jumping */
     if(player.legDown && !player.jumping) {
         renderLegDown(x, y, upsideDown);
+    /* If leg down and not jumping */
     } else if(!player.legDown && !player.jumping){
         renderLegUp(x, y, upsideDown);
+    /* If jumping and over certain y (transition animation) */
     } else if(player.jumping && player.y > 25){
         renderJumpingGround(x, y, upsideDown);
     } else {
@@ -74,6 +80,7 @@ void render(EntityType_t type, int x, int y) {
     }
 }
 
+/* Reset obstacle, evaluate score and go to game over */
 void reset() {
     evalueteScore();
     obstacle.x = 129;
@@ -102,11 +109,13 @@ void checkCollisions(){
 
 /* jumping function */
 void playerJump() {
+    /* Jump if certain conditions are met. */
     if(jumpDelta >= 27 && dimCounter == 50 &&
         getbtns() == 4 && getsw() == binaryNumber) {
         jumpDelta = 0;
         player.jumping = 1;
         binaryNumber = getRandomInt(DIFFICULTY);
+    /* Jump movement with functions */
     } else if(jumpDelta < 27) {
         jumpDelta++;
         if(player.y <= FLOOR_Y_UP && !upsideDown) player.y = (((jumpDelta - 27) * jumpDelta*jumpDelta) / 240) + 29;
@@ -116,6 +125,7 @@ void playerJump() {
         jumpDelta++;
         if(!upsideDown) player.y = -(0.015) * (jumpDelta - 20) * (jumpDelta - 52) + 23;
         else player.y = 0.015 * (jumpDelta - 20) * (jumpDelta - 52) + 13;
+    /* Jump complete */
     } else{
         if(!upsideDown) player.y = FLOOR_Y_UP;
         else player.y = FLOOR_Y_DOWN;
@@ -125,11 +135,12 @@ void playerJump() {
 }
 
 void updatePlayer() {
+    /* Increment time counter */
     timeCounter++;
-    //get switches buttons, check correct answer etc.etc.
-    //check collissions etc.etc.
+    /* Check for player jump */
     playerJump();
 
+    /* Simulate running */
     if(timeCounter % 5 == 0 && player.legDown){
         player.legDown = 0;
     } else if(timeCounter % 5 == 0 && !player.legDown){
@@ -137,12 +148,16 @@ void updatePlayer() {
     }
 }
 
+/* Update the obstacle */
 void updateObstacles() {
+    /* Reset if outside screen */
     if(obstacle.x < -2){
         SCORE++;
         obstacle.x = 128;
     }
+    /* Move obstacle based on score */
     obstacle.x -= 1 + 0.02*SCORE;
+    /* Set new floor based on upsdie down state */
     if(upsideDown) {
         obstacle.y = FLOOR_Y_DOWN - 4;
     } else {
@@ -150,13 +165,16 @@ void updateObstacles() {
     }
 }
 
+/* Render everything in the background */
 void renderBackground() {
+    /* Render clouds */
     if(!upsideDown){
         renderCloud(128 - cloudX, 0);
         renderCloud(150 - cloudX, 2);
         renderCloud(200 - cloudX, 1);
     }
 
+    /* Render floating particles and webs */
     if(upsideDown){
         renderParticle(particleX, 11);
         renderParticle(particleX - 20, 27);
@@ -172,6 +190,7 @@ void renderBackground() {
 
 /* update background animations */
 void updateBackground(){
+    /* Increment and decrement x values for clouds and particles */
     if(timeCounter % 2) particleX--;
 
     if(timeCounter % 4 == 0) cloudX++;
@@ -185,38 +204,28 @@ void updateBackground(){
 void changeDimension(){
     if(dimCounter <= 49){
         dimCounter++;
-        if(!upsideDown){
-            if(dimCounter <= 20){
-                upsideDownValue++;
-            } else if(dimCounter <= 32) {
-                if((dimCounter - 20) % 2) upsideDownValue ++;
-            } else if(dimCounter <= 40){
-                if((dimCounter - 32) % 3 == 2) upsideDownValue ++;
-            } else if(dimCounter <= 49){
-                if((dimCounter - 40) % 4 == 3) upsideDownValue ++;
-            } else{
-                upsideDownValue = 31;
-                upsideDown = 1;
-                obstacle.x = 135;
-            }
-        } else {
-            if(dimCounter <= 20){
-                upsideDownValue--;
-            } else if(dimCounter <= 32) {
-                if((dimCounter - 20) % 2) upsideDownValue --;
-            } else if(dimCounter <= 40){
-                if((dimCounter - 32) % 3 == 2) upsideDownValue --;
-            } else if(dimCounter <= 49){
-                if((dimCounter - 40) % 4 == 3) upsideDownValue --;
-            } else{
+        if(dimCounter <= 20){
+            upsideDownValue--;
+        } else if(dimCounter <= 32) {
+            if((dimCounter - 20) % 2) upsideDown ? upsideDownValue-- : upsideDownValue++;
+        } else if(dimCounter <= 40){
+            if((dimCounter - 32) % 3 == 2) upsideDown ? upsideDownValue-- : upsideDownValue++;
+        } else if(dimCounter <= 49){
+            if((dimCounter - 40) % 4 == 3) upsideDown ? upsideDownValue-- : upsideDownValue++;
+        } else{
+            if(upsideDown) {
                 upsideDownValue = 0;
                 upsideDown = 0;
-                obstacle.x = 135;
+            } else {
+                upsideDownValue = 31;
+                upsideDown = 1;
             }
         }
+        obstacle.x = 135;
     }
 }
 
+/* Render entities and background, and binary digit */
 void entities_render() {
     render(obstacle.type, obstacle.x, obstacle.y);
     render(PLAYER,PLAYER_X,player.y);
@@ -224,13 +233,17 @@ void entities_render() {
     displayDigit(62,1,binaryNumber);
 }
 
+/* Update all entities on the screen, including background */
 void entities_update() {
+    /* Reset timeout counter (don't want overflow) */
     if(timeCounter > 130) timeCounter = 0;
+    /* Update everything */
     updatePlayer();
     updateObstacles();
     updateBackground();
     checkCollisions();
+    /* Do dimension change if we have specified to do it */
     changeDimension();
-    /* Check collisions last! This is where we change state! */
+    /* Check collisions */
     checkCollisions();
 }
