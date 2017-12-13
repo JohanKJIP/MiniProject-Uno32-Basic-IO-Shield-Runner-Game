@@ -205,10 +205,6 @@ _isr_trampoline:
 	# will be saved and restored by that handler
 	# (the C compiler will see to that).
 
-	# call user's handler
-	jal user_isr
-	nop
-
 	# restore saved registers
 	lw $25,68($sp)
 	lw $24,64($sp)

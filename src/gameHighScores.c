@@ -35,8 +35,6 @@ void highScoresScreen(){
     displayDigit(111, 2, HIGH_SCORE_2);
     displayString(40, 3, "hard: ");
     displayDigit(72, 3, HIGH_SCORE_3);
-
-    //TODO create additional monster animation
 }
 
 /* Update the high score screen */

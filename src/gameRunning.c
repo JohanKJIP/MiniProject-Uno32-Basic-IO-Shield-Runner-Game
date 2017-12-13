@@ -4,6 +4,7 @@
 
 #include <stdint.h>
 #include "gameHeader.h"
+#include "entities.h"
 
 /* Accumulator to determine game speed */
 int accumulator = 0;
@@ -11,6 +12,11 @@ int accumulator = 0;
 int random = 0;
 /* Init the global binary number */
 int binaryNumber;
+
+/* upside down variables */
+int upsideDown = 0;
+int upsideDownValue = 0;
+int dimCounter = 50;
 
 /**
  * Rendering method for gamescreen.
@@ -36,6 +42,38 @@ int getRandomInt(int i) {
     return random%i;
 }
 
+/* change ground dimension */
+void changeDimension(){
+    if(dimCounter <= 49){
+        dimCounter++;
+        if(dimCounter <= 20){
+            (upsideDown) ? upsideDownValue-- : upsideDownValue++;
+        } else if(dimCounter <= 32) {
+            if((dimCounter - 20) % 2){
+                (upsideDown) ? upsideDownValue-- : upsideDownValue++;
+            }
+        } else if(dimCounter <= 40){
+            if((dimCounter - 32) % 3 == 2){
+                (upsideDown) ? upsideDownValue-- : upsideDownValue++;
+            }
+        } else if(dimCounter <= 49){
+            if((dimCounter - 40) % 4 == 3){
+                (upsideDown) ? upsideDownValue-- : upsideDownValue++;
+            }
+        } else{
+            if(upsideDown){
+                upsideDownValue = 0;
+                upsideDown = 0;
+                obstacle.x = 135;
+            } else {
+                upsideDownValue = 31;
+                upsideDown = 1;
+                obstacle.x = 135;
+            }
+        }
+    }
+}
+
 /**
  * Update game, this is the game running loop.
  */
@@ -47,6 +85,7 @@ void updateRunning() {
     if(accumulator > 14) {
         /* Only update every 14th time we render */
         entities_update();
+        changeDimension();
         accumulator = 0;
     }
     /* Render every cycle */

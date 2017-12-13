@@ -45,6 +45,7 @@ typedef struct Obstacle {
 
 /* Player and the different update & rendering methods */
 extern Player player;
+extern Obstacle obstacle;
 void renderLegDown(int,int,int);
 void renderLegUp(int,int,int);
 void renderJumpingGround(int,int,int);
