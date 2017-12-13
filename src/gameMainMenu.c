@@ -57,6 +57,9 @@ void mainMenuScreen() {
     displayHex(startX + 49 + 1, 2,0x3);
     displayHex(startX + 49 + 5, 2,0x3);
     displayHex(startX + 49 + 6, 2,0x2);
+
+    /* Render web graphic */
+    renderWeb(1);
 }
 
 void animation() {
@@ -93,6 +96,7 @@ void animation() {
         /* Render the monsters */
         render(player.type,player.x,player.y);
         renderMonster(monster.x, FLOOR_Y_UP, legDownMonster);
+
         /* Update display */
         display_update();
         counter++;

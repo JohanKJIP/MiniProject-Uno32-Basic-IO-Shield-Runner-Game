@@ -21,11 +21,6 @@ int cloudX = 0;
 /* jump variables */
 int jumpDelta = 60;
 
-/* upside down variables */
-int upsideDown = 0;
-int upsideDownValue = 0;
-int dimCounter = 50;
-
 /* Init player */
 Player player;
 
@@ -122,7 +117,7 @@ void playerJump() {
         jumpDelta++;
         if(player.y <= FLOOR_Y_UP && !upsideDown) player.y = (((jumpDelta - 27) * jumpDelta*jumpDelta) / 240) + 29;
         else player.y = -(((jumpDelta - 27) * jumpDelta*jumpDelta) / 240) + 8;
-        if(jumpDelta == 20 && dimCounter == 50 && timeCounter % 9 == 1 && GAMESTATE == 2) dimCounter = 0;
+        if(jumpDelta == 20 && dimCounter == 50 && timeCounter % 7 == 1 && GAMESTATE == 2) dimCounter = 0;
     } else if(jumpDelta > 20 && dimCounter < 50){
         jumpDelta++;
         if(!upsideDown) player.y = -(0.015) * (jumpDelta - 20) * (jumpDelta - 52) + 23;
@@ -175,8 +170,8 @@ void renderBackground() {
         renderCloud(150 - cloudX, 2);
         renderCloud(200 - cloudX, 1);
     }
-    /* Render particles */
     if(upsideDown){
+        /* Render particles */
         renderParticle(particleX, 11);
         renderParticle(particleX - 20, 27);
         renderParticle(particleX - 40, 15);
@@ -185,7 +180,8 @@ void renderBackground() {
         renderParticle(particleX - 100, 19);
         renderParticle(particleX - 110, 25);
         renderParticle(particleX - 120, 12);
-        renderWeb();
+        /* Render web */
+        renderWeb(0);
     }
 }
 
@@ -199,38 +195,6 @@ void updateBackground(){
     if(particleX == 0) particleX = 128;
 
     if(cloudX == 206) cloudX = 0;
-}
-
-/* change ground dimension */
-void changeDimension(){
-    if(dimCounter <= 49){
-        dimCounter++;
-        if(dimCounter <= 20){
-            (upsideDown) ? upsideDownValue-- : upsideDownValue++;
-        } else if(dimCounter <= 32) {
-            if((dimCounter - 20) % 2){
-                (upsideDown) ? upsideDownValue-- : upsideDownValue++;
-            }
-        } else if(dimCounter <= 40){
-            if((dimCounter - 32) % 3 == 2){
-                (upsideDown) ? upsideDownValue-- : upsideDownValue++;
-            }
-        } else if(dimCounter <= 49){
-            if((dimCounter - 40) % 4 == 3){
-                (upsideDown) ? upsideDownValue-- : upsideDownValue++;
-            }
-        } else{
-            if(upsideDown){
-                upsideDownValue = 0;
-                upsideDown = 0;
-                obstacle.x = 135;
-            } else {
-                upsideDownValue = 31;
-                upsideDown = 1;
-                obstacle.x = 135;
-            }
-        }
-    }
 }
 
 /* Render entities and background, and binary digit */
@@ -250,8 +214,6 @@ void entities_update() {
     updateObstacles();
     updateBackground();
     checkCollisions();
-    /* Do dimension change if we have specified to do it */
-    changeDimension();
     /* Check collisions */
     checkCollisions();
 }

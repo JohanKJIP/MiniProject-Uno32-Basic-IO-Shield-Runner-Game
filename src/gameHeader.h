@@ -33,6 +33,9 @@ extern int binaryNumber;
 
 /* Functions from gameRunning.c */
 int getRandomInt(int);
+extern int upsideDown;
+extern int upsideDownValue;
+extern int dimCounter;
 
 /* Functions from entityHandler.c */
 void entities_update(void);

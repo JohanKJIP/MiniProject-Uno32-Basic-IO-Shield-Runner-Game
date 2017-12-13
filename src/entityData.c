@@ -171,7 +171,7 @@ void renderMonster(int x, int y, int legDown){
 }
 
 /* render corner webs */
-void renderWeb(){
+void renderWeb(int menu){
     displayHex(0, 3, 0x91);
     displayHex(1, 3, 0x88);
     displayHex(2, 3, 0x22);
@@ -179,7 +179,6 @@ void renderWeb(){
     displayHex(4, 3, 0x10);
     displayHex(5, 3, 0x28);
     displayHex(6, 3, 0x40);
-    displayHex(7, 3, 0x28);
     displayHex(7, 3, 0x28);
     displayHex(8, 3, 0x80);
     displayHex(9, 3, 0x40);
@@ -201,6 +200,36 @@ void renderWeb(){
     displayHex(111, 3, 0x80);
     displayHex(107, 3, 0x80);
     displayHex(101, 3, 0x80);
+
+    if(menu){
+        displayHex(0, 0, 0x41);
+        displayHex(1, 0, 0x22);
+        displayHex(2, 0, 0x10);
+        displayHex(3, 0, 0x21);
+        displayHex(4, 0, 0xa);
+        displayHex(5, 0, 0x10);
+        displayHex(6, 0, 0x5);
+        displayHex(7, 0, 0x2);
+        displayHex(8, 0, 0x1);
+        displayHex(10, 0, 0x1);
+        displayHex(12, 0, 0x2);
+        displayHex(17, 0, 0x1);
+        displayHex(22, 0, 0x1);
+
+        displayHex(127, 0, 0x91);
+        displayHex(126, 0, 0x44);
+        displayHex(125, 0, 0x10);
+        displayHex(124, 0, 0x24);
+        displayHex(123, 0, 0x2);
+        displayHex(122, 0, 0x9);
+        displayHex(121, 0, 0x8);
+        displayHex(120, 0, 0x2);
+        displayHex(118, 0, 0x1);
+        displayHex(116, 0, 0x2);
+        displayHex(112, 0, 0x1);
+        displayHex(108, 0, 0x1);
+        displayHex(100, 0, 0x1);
+    }
 }
 
 /* render pixel */
