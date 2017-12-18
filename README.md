@@ -14,4 +14,4 @@ Survive for as long as possible by jumping over obstacles. In order to jump you 
 5. if 4. doesn't work you need to specify USB port. Google it :)
 
 
-![Gameplay](https://i.imgur.com/5j0S2so.mp4)
+![Gameplay](https://j.gifs.com/kZw2WN.gif)
